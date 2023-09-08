@@ -1,0 +1,6 @@
+.tray-container{
+    display: flex;
+}
+.tile-container{
+    margin: 5px;
+}

@@ -1,0 +1,19 @@
+.singleTile{
+    width: 54px;
+    height: 54px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    /* background-image: url("/src/assets/tiles/TileSingle.png"); */
+}
+.wholePiece{
+    display: flex;
+}
+
+.row{
+    display: flex;
+}
+.empty{
+    width: 54px;
+    height: 54px;
+}
