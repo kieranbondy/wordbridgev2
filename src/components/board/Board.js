@@ -4,13 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function Board(props) {
     let board =[];
-    let startArr = [];
+    // let startArr = [];
     let height = props.data.length
     //Sorting the grid into rocks, open spaces, and filled spaces
     for (let i=0; i<height; i++){
         board.push([])
         let width = props.data[i].length
-        startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
+        // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
             var letter = props.data[i][j]
             if(letter === 0){
@@ -22,10 +22,9 @@ export default function Board(props) {
             }
         }
     };
-    console.log(startArr)
     return (
         <>
-    <div>{startArr.map((sq)=>(<div key={uuidv4()}>{sq}</div>))}</div>
+    {/* <div>{startArr.map((sq)=>(<div key={uuidv4()}>{sq}</div>))}</div> */}
     <div>{board.map((row)=>(
         <div className='row' key={uuidv4()}>
         {row.map((space)=>(

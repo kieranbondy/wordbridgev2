@@ -8,7 +8,7 @@ export default function Game() {
     //States: Tracking mouse data and overall game data
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0, letter:''})
-    const [gameData, setGameData] = useState({level:1, start:0, board:[],tray:['a','c','b','c']})
+    const [gameData, setGameData] = useState({level:3, start:0, board:[],tray:['a','c','b','c']})
     
     //Getting the closest spaces to dropped tile and returning if it is within range
     function getClosest(x, y) {
@@ -43,8 +43,8 @@ export default function Game() {
     useEffect(()=>{
         const width = gameData.level + 2
         const height = gameData.level + 2
-        const [newBoard, newStart] = generateBoard(width,height, gameData.level)
-        setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart}})
+        const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level)
+        setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters}})
     },[])
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
