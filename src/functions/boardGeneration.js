@@ -24,7 +24,6 @@ export function generateBoard(width, height, level){
     // for (let index = 0; index < random-1; index++) {
     //     lettersList=lettersList+alphabet[Math.floor(Math.random() * alphabet.length)] 
     // }
-    console.log(path, letters)
     return [grid,first, letters];
 }
 
@@ -78,14 +77,12 @@ export function findPath(grid, start){
 
 
 export function generateLetters(path, letter, lettersList){
-    console.log(path)
     let count = 0;
     const index = path[0][0] === path[1][0] ? 0 : 1
     while(count < path.length -1 && path[count][index] === path[count+1][index]){
         count++;
     }
     const word = getWord(count+1, letter)
-    console.log(word, lettersList)
     lettersList = lettersList ? lettersList + word.slice(1) : lettersList + word
     if(path.length > count+1){
         lettersList = generateLetters(path.slice(count), word.slice(-1), lettersList)
@@ -118,7 +115,6 @@ function getWord(length, startingLetter){
             startingLetter = alphabet[Math.floor(Math.random() * alphabet.length)]
         }
         const words = sorted_words[length][startingLetter.toLowerCase()]
-        console.log(startingLetter, words, length)
         if(!words){
             console.log("OH NO IT BROKE")
             return '0'

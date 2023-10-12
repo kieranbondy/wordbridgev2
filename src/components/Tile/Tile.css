@@ -16,4 +16,18 @@
 .empty{
     width: 54px;
     height: 54px;
+    border: red solid;
+    border-radius: 5px 0px 0px 5px;
+    border-width: 1px 0px 1px 1px;
+}
+.emptytwo{
+    width: 54px;
+    height: 54px;
+    border: red solid;
+    border-radius: 0px 5px 5px 0px;
+    border-width: 1px 1px 1px 0px;
+}
+
+.letterContainer{
+    display: flex;
 }
