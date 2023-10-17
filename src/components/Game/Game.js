@@ -6,18 +6,20 @@ import './Game.css'
 import Tile2 from '../Tile/Tile2'
 export default function Game() {
     //States: Tracking mouse data and overall game data
+    // gameData currently hardcoded for testing
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0, letter:''})
     const [gameData, setGameData] = useState({level:3, start:0, board:[],tray:[[['a']],[['b']],[['c'],['d']],[['p','i']]], pickedUpTile:""})
     
     //Getting the closest spaces to dropped tile and returning if it is within range
-    //test comment
     function getClosest(x, y) {
         // return "failure_failure_failure"
-        const elements = document.querySelectorAll('[id*="play"], [id*="tile"]'); // Get elements with IDs containing "play"
+        const elements = document.querySelectorAll('[id*="play"], [id*="tile"]'); // Get elements with IDs containing "play" (CSS query?)
+        // setting parameter bounds
         let closestElement = null;
         let minDistance = Infinity;
       
+        //iterates through all elements that match above query
         elements.forEach((element) => {
             if(element.id !== mousePosition.letter){
                 const rect = element.getBoundingClientRect();
@@ -42,15 +44,18 @@ export default function Game() {
         }
         return closestElement.id;
       }
+
+    //Board generation, calculates board size based on gameLevel
     useEffect(()=>{
         const width = gameData.level + 2
         const height = gameData.level + 2
-        const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level)
+        const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level) //calls generateBoard from functions directory
         setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:[[['a']],[['b']],[['c'],['d']],[['p','i']]]}})
     },[])
+
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
-        const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_')
+        const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_') //splits the return value
         if(type !== "failure"){
             const [letter,trayIndex] = mousePosition.letter.split('_')
             console.log(letter)
@@ -82,6 +87,8 @@ export default function Game() {
         }
             // eslint-disable-next-line react-hooks/exhaustive-deps
     },[mousePosition])
+    //What is difference between "play" and "tile" tags?
+    //Nvm, you gotta keep track of gameboard and letter bank (tray)
 
   return (
     <> 
