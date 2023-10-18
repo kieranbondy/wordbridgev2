@@ -2,7 +2,7 @@ import sorted_words from '../data/words_sorted.json'
 //This function creates an empty game board
 export function generateBoard(width, height, level){
     let grid = new Array(height).fill(0).map(() => new Array(width).fill(0));
-    const rocks = Math.floor(Math.random() * width);
+    const rocks = Math.floor(Math.random() * width); //how are we setting the rocks?
     //adding rocks to the board
     for (let i = 0; i < rocks; i++) {
         const randomRow = Math.floor(Math.random() * height);
@@ -27,7 +27,7 @@ export function generateBoard(width, height, level){
     return [grid,first, letters];
 }
 
-//Finds a random path accross the maze
+//Finds a random path accross the maze (this confuses me still)
 export function findPath(grid, start){
     const rows = grid.length;
     const cols = grid[0].length;
@@ -75,7 +75,7 @@ export function findPath(grid, start){
     return null; // No path to the final column
   }
 
-
+// recursively generating letters?
 export function generateLetters(path, letter, lettersList){
     let count = 0;
     const index = path[0][0] === path[1][0] ? 0 : 1
