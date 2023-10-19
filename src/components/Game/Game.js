@@ -15,6 +15,7 @@ export default function Game() {
     function getClosest(x, y) {
         // return "failure_failure_failure"
         const elements = document.querySelectorAll('[id*="play"], [id*="tile"]'); // Get elements with IDs containing "play" (CSS query?)
+        console.log(elements)
         // setting parameter bounds
         let closestElement = null;
         let minDistance = Infinity;
@@ -42,6 +43,7 @@ export default function Game() {
         if(closestElement.id.includes('play') && minDistance > 30){
             return "failure_failure_failure"
         }
+        console.log("Closest Element: ", closestElement.id)
         return closestElement.id;
       }
 
@@ -51,11 +53,13 @@ export default function Game() {
         const height = gameData.level + 2
         const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level) //calls generateBoard from functions directory
         setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:[[['a']],[['b']],[['c'],['d']],[['p','i']]]}})
+        console.log("Initial Board: ", newBoard)
     },[])
 
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
         const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_') //splits the return value
+        console.log(first, second, type)
         if(type !== "failure"){
             const [letter,trayIndex] = mousePosition.letter.split('_')
             console.log(letter)
@@ -67,6 +71,7 @@ export default function Game() {
                     const updatedTray = [...prevData.tray];
                     updatedBoard[first][second] = letter;
                     updatedTray.splice(parseInt(trayIndex), 1)
+                    console.log("Updated Board: ", updatedBoard);
                     return { ...prevData, board: updatedBoard, tray: updatedTray };
                 })
             } else if(type === 'tile'){
