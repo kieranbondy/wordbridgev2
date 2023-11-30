@@ -12,28 +12,57 @@ export default function Board(props) {
         let width = props.data[i].length
         // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
-            var letter = props.data[i][j]
+            var letter = props.data[i][j].value
             if(letter === 0){
                 board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
             } else if ( letter === 1){
                 board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
             } else{
-                board[i].push(<div className='letter-square' id={`${i}_${j}_play`}>{letter}</div>)
+                board[i].push(<div className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>{letter}</div>)
             }
         }
     };
 
+    function getWholePiece(board,id){
+        let output = []
+        let boardCopy = JSON.parse(JSON.stringify(board));
+        let occurences = []
+        for(let i=0; i<board.length; i++) {
+            let row = []
+            let hasValue = false
+            for(let j=0; j<board[i].length; j++) {
+                let letter = board[i][j]
+                if(letter.id === id){
+                    hasValue = true
+                    boardCopy[i][j] = {id:'',value:0}
+                    occurences.push(j)
+                    row.push(letter)
+                } else {
+                    row.push({id:'',value:''})
+                }
+            }
+            if(hasValue){
+                output.push(row)
+            }
+        };
+        const minValue = Math.min(...occurences);
+        const maxValue = Math.max(...occurences);
+        let final = output.map(function(val) {
+            return val.slice(minValue,maxValue+1)
+        })
+        return [final,boardCopy]
+    }
+
     function handleClick(event){
         const inner = event.target.innerHTML
-        const [i,j,extra] = event.target.id.split('_')
-        console.log(event)
+        const [i,j,id] = event.target.id.split('_')
+        
         if(inner){
             props.setGameData((prev) => {
+                const [letter, newBoard] = getWholePiece(prev.board, id)
                 const newTray = prev.tray;
-                const newBoard = prev.board;
-                const temp = prev.board[i][j]
-                newBoard[i][j] = 0;
-                newTray.push([[inner]])
+                const temp = prev.board[i][j].id
+                newTray.push(letter)
                 return {...prev, tray:newTray, board:newBoard, pickedUpTile:[`${temp}_${newTray.length-1}`,event.clientX, event.clientY]}
             })
         }

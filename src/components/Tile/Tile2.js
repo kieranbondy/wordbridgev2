@@ -16,7 +16,7 @@ export default function Tile2(props) {
                     return({...prev, pickedUpTile:""})
                 })
                 setIsMouseDown(false);
-                props.setMousePosition({x:event.clientX, y:event.clientY, letter:event.target.parentElement.parentElement.id})
+                props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
             if(event.type === "touchend"){
                 const touch = event.changedTouches[0]
@@ -24,7 +24,7 @@ export default function Tile2(props) {
                     return({...prev, pickedUpTile:""})
                 })
                 setIsMouseDown(false);
-                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter:event.target.parentElement.parentElement.id})
+                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
         }
         // useEffect(() => {
@@ -33,7 +33,8 @@ export default function Tile2(props) {
         //On load setting default styles
         useEffect(() => {
             setTargetStyle(startMouseDown ? {position: 'absolute',left: `${props.pickedUp[1]-25}px`,top: `${props.pickedUp[2]-25}px`,}:{})
-          }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps  
+        }, []);
           //Handles tracking the cursor when a tile is clicked both mobile and web
     useEffect(() => {
         //WEB Changing the position of the tile through styling to follow the mouse
@@ -75,36 +76,34 @@ export default function Tile2(props) {
       }, [isMouseDown]);
 
         function generateStyle(i,j,arr){
-            let style ={}
             let borderRadius = ['5px','5px','5px','5px']
             let height = 54
             let width = 54
-            if(arr[i][j] === 0){
-                return{width: '52px',
-                height: '52px',
-                display:'none'
+            if(arr[i][j].value === ''){
+                return{width: '58px',
+                height: '54px',
             }
             }
             let borderWidth = ['2px','2px','2px','2px']
-            if(j>0 && !Number.isInteger(arr[i][j-1])){
+            if(j>0 && arr[i][j-1].value !== ''){
                 borderRadius[0] = '0px'
                 borderRadius[3] = '0px'
                 borderWidth[3] = '0px'
                 width += 2
             }
-            if(i>0 && !Number.isInteger(arr[i-1][j])){
+            if(i>0 && arr[i-1][j].value !== ''){
                 borderRadius[0] = '0px'
                 borderRadius[1] = '0px'
                 borderWidth[0] = '0px'
                 height += 2
             }
-            if(j<arr[i].length-1 && !Number.isInteger(arr[i][j+1])){
+            if(j<arr[i].length-1 && arr[i][j+1].value !== ''){
                 borderRadius[1] = '0px'
                 borderRadius[2] = '0px'
                 borderWidth[1] = '0px'
                 width += 2
             }
-            if(i<arr.length-1 && !Number.isInteger(arr[i+1][j])){
+            if(i<arr.length-1 && arr[i+1][j].value !== ''){
                 borderRadius[2] = '0px'
                 borderRadius[3] = '0px'
                 borderWidth[2] = '0px'
@@ -120,13 +119,13 @@ export default function Tile2(props) {
         }
         return (
             <>
-            <div id={props.id} onMouseDown={handleEvent} onTouchStart={handleEvent} onTouchEnd={handleEvent} onMouseUp={handleEvent} style={targetStyle}>
+            <div id={`${props.letters[0][0].id}_${props.index}_tile`} onMouseDown={handleEvent} onTouchStart={handleEvent} onTouchEnd={handleEvent} onMouseUp={handleEvent} style={targetStyle}>
             {props.letters.map((row, i) => {
                 return(
                     <div className='letterContainer'>
                 {row.map((letter, j) =>{
                     return(
-                        <div style={generateStyle(i,j,props.letters)}>{letter}</div>
+                        <div style={generateStyle(i,j,props.letters)}>{letter.value}</div>
                     )
 
                 })}

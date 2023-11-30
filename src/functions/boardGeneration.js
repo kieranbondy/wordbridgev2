@@ -1,29 +1,35 @@
 import sorted_words from '../data/words_sorted.json'
 //This function creates an empty game board
 export function generateBoard(width, height, level){
-    let grid = new Array(height).fill(0).map(() => new Array(width).fill(0));
+    //creating array of unique objects
+    const grid = new Array(height).fill(null).map(() => {
+        return new Array(width).fill(null).map(()=> { return {id: "", value: 0 }});
+      });
     const rocks = Math.floor(Math.random() * width);
     //adding rocks to the board
     for (let i = 0; i < rocks; i++) {
         const randomRow = Math.floor(Math.random() * height);
         const randomCol = Math.floor(Math.random() * width);
-        grid[randomRow][randomCol] = 1;
+        grid[randomRow][randomCol].value = 1;
     }
     //temporary first generation just deleting a rock if its there.
     const first = [0,0];
-    grid[first[0]][0] = 0;
+    grid[first[0]][first[1]].value = 0;
     // grid = [
     //     [0, 1, 0, 0, 1],
     //     [0, 0, 1, 0, 1],
     //     [1, 0, 0, 0, 0],
     //     [0, 1, 1, 1, 0],
     //   ];
-    const path = findPath(grid, first)
+    
+    
+    // const path = findPath(grid, first)
     //Randomizes string and then turns string into array of characters
-    const letters = [...randomizeString(generateLetters(path, "", "", 2))]
+    // const letters = [...randomizeString(generateLetters(path, "", "", 2))]
     // for (let index = 0; index < random-1; index++) {
     //     lettersList=lettersList+alphabet[Math.floor(Math.random() * alphabet.length)] 
     // }
+    const letters = []
     return [grid,first, letters];
 }
 
