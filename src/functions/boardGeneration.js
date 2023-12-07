@@ -1,4 +1,6 @@
 import sorted_words from '../data/words_sorted.json'
+const { v4: uuidv4 } = require('uuid');
+
 //This function creates an empty game board
 export function generateBoard(width, height, level){
     //creating array of unique objects
@@ -23,96 +25,152 @@ export function generateBoard(width, height, level){
     //   ];
     
     
-    // const path = findPath(grid, first)
+    const path = findRandomPath(grid, {row:0,column:0})
+    const letters = generateLettersFromPath(path)
+    // const letters = generateLetterTiles(letterPath)
     //Randomizes string and then turns string into array of characters
-    // const letters = [...randomizeString(generateLetters(path, "", "", 2))]
     // for (let index = 0; index < random-1; index++) {
     //     lettersList=lettersList+alphabet[Math.floor(Math.random() * alphabet.length)] 
     // }
-    const letters = []
     return [grid,first, letters];
 }
 
-//Finds a random path accross the maze
-export function findPath(grid, start){
+
+function generateLettersFromPath(path){
+    let grid = [...Array(5)].map(e => Array(5).fill(''));
+    let horizontal = path.length > 1 ? path[1].row - path[0].row === 0 : false
+    let startingLetter = ''
+    let length = 0
+    let words = []
+    let word
+    for(let i=1; i< path.length; i++){
+        if(horizontal){
+            if(path[i].row - path[i-1].row === 0){
+                length++
+            } else {
+                word = getWord(length+1,startingLetter)
+                let start = path[i].column - (word.length-1)
+                for(let letter of word){
+                    grid[path[i-1].row][start] = letter
+                    start++
+                }
+                words.push([word, horizontal])
+                startingLetter = word.slice(-1)
+                length = 1
+                horizontal = !horizontal
+            }
+        } else {
+            if(path[i].column - path[i-1].column === 0){
+                length++
+            } else {
+                word = getWord(length+1,startingLetter)
+                let start = path[i].row - (word.length-1)
+                for(let letter of word){
+                    grid[start][path[i-1].column] = letter
+                    start++
+                }
+                words.push([word, horizontal])
+                startingLetter = word.slice(-1)
+                length = 1
+                horizontal = !horizontal
+            }
+        }
+        if(i === path.length-1){
+            word = getWord(length+1,startingLetter)
+            let start = path[i].column - (word.length-1)
+            for(let letter of word){
+                grid[path[i].row][start] = letter
+                start++
+            }
+            words.push([word, horizontal])
+            startingLetter = word.slice()
+            length = 1
+            horizontal = !horizontal
+        }
+    }
+    console.log("Generated words: ", words)
+    console.log('TILES: ', generateLetterTiles(grid, path))
+    return generateLetterTiles(grid, path)
+}
+
+function generateLetterTiles(grid,path){
+    let max = path.length < 3 ? path.length : 3
+    let tileSize = Math.floor(Math.random() * max);
+    const startRow = path[0].row;
+    const startCol = path[0].column;
+    const endRow = path[tileSize].row;
+    const endCol = path[tileSize].column;
+    const id = uuidv4();
+    const subArray = grid.slice(startRow, endRow+1).map(row => 
+        row.slice(startCol, endCol+1).map(val => 
+            ({id:id, value:val})));
+    let restOfPath = path.slice(tileSize+1)
+    if(restOfPath.length === 0){
+        return [[...subArray]]
+    } else {
+        return [[...subArray], ...generateLetterTiles(grid, restOfPath)];
+    }
+    
+
+}
+
+//X and Y are inverted in this function need to fix it
+export function findRandomPath(grid, start) {
     const rows = grid.length;
     const cols = grid[0].length;
   
     // Create a queue for BFS where each element is an object { x, y, path }
     const queue = [];
-    
+  
     // Initialize the starting point
-    queue.push({ x: 0, y: 0, path: [start] });
-    
+    queue.push({ row: 0, column: 0, path: [start] });
+  
     // Create a visited array to keep track of visited cells
     const visited = new Array(rows).fill(false).map(() => new Array(cols).fill(false));
-    
+  
     // Define the possible moves (right, down, up, left)
-    const dx = [1, 0, 0, -1];
-    const dy = [0, 1, -1, 0];
-    
+    const drow = [1, 0, -1, 0];
+    const dcolumn = [0, 1, 0, -1];
+  
     while (queue.length > 0) {
-      const { x, y, path } = queue.shift();
+      // Randomly select an element from the queue
+      const randomIndex = Math.floor(Math.random() * queue.length);
+      const { row, column, path } = queue[randomIndex];
+      queue.splice(randomIndex, 1); // Remove the selected element from the queue
   
       // Check if we have reached the final column
-      if (y === cols - 1) {
+      if (column === cols - 1) {
         return path; // Path found, return it
       }
-      
+  
       // Mark the current cell as visited
-      visited[x][y] = true;
-      
-      // Explore the neighboring cells
+      visited[row][column] = true;
+  
+      // Shuffle the order of possible moves
+      const directions = Array.from({ length: 4 }, (_, i) => i);
+      directions.sort(() => Math.random() - 0.5);
+  
+      // Explore the neighboring cells in a random order
       for (let i = 0; i < 4; i++) {
-        const newX = x + dx[i];
-        const newY = y + dy[i];
-        
+        const newRow = row + drow[directions[i]];
+        const newColumn = column + dcolumn[directions[i]];
+  
         // Check if the new cell is within bounds and is an open space (0)
-        if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && grid[newX][newY] === 0 && !visited[newX][newY]) {
+        if (newRow >= 0 && newRow < rows && newColumn >= 0 && newColumn < cols && grid[newRow][newColumn].value === 0 && !visited[newRow][newColumn]) {
           // Create a new path by extending the current path
-          const newPath = [...path, [newX, newY]];
-          
-          queue.push({ x: newX, y: newY, path: newPath });
-          visited[newX][newY] = true;
+          const newPath = [...path, { row: newRow, column: newColumn }];
+  
+          queue.push({ row: newRow, column: newColumn, path: newPath });
+          visited[newRow][newColumn] = true;
         }
       }
     }
-    
+  
     return null; // No path to the final column
   }
 
 
-export function generateLetters(path, letter, lettersList){
-    let count = 0;
-    const index = path[0][0] === path[1][0] ? 0 : 1
-    while(count < path.length -1 && path[count][index] === path[count+1][index]){
-        count++;
-    }
-    const word = getWord(count+1, letter)
-    lettersList = lettersList ? lettersList + word.slice(1) : lettersList + word
-    if(path.length > count+1){
-        lettersList = generateLetters(path.slice(count), word.slice(-1), lettersList)
-    } else {
-        return lettersList
-    }
-    //Adding random extra letters
-    return lettersList
 
-}
-
-function randomizeString(str){
-    // convert the string to an array of characters
-    const chars = str.split("");
-    // iterate over the array from the end to the beginning
-    for (let i = chars.length - 1; i > 0; i--) {
-     // choose a random index from 0 to i (inclusive)
-        const j = Math.floor(Math.random() * (i + 1));
-        // swap the current character with the randomly chosen one
-        [chars[i], chars[j]] = [chars[j], chars[i]];
-    }
-    // convert the array back to a string and return it
-    return chars.join("");
-}
 
 function getWord(length, startingLetter){
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -126,15 +184,6 @@ function getWord(length, startingLetter){
             return '0'
         }
         const word = words[Math.floor(Math.random() * words.length)].toUpperCase();
-        console.log("generated word: ", word)
-    // if(first){
-    //     setLetters((previous)=>previous+word)
-    //     setCurrLetters((previous)=>previous+word)
-    //     first = false;
-    // }else{
-    //     setLetters((previous)=>previous+word.slice(1))
-    //     setCurrLetters((previous)=>previous+word.slice(1))
-    // }
     return word
-} 
+    } 
 } 
