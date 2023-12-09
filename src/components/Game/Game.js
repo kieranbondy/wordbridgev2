@@ -155,6 +155,7 @@ export default function Game() {
         });
         return outcome;
     }
+    // Initial game setup --> calls board generation
     useEffect(()=>{
         const width = gameData.level + 2
         const height = gameData.level + 2

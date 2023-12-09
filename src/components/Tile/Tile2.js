@@ -76,7 +76,7 @@ export default function Tile2(props) {
       }, [isMouseDown]);
 
         function generateStyle(i,j,arr){
-            let borderRadius = ['5px','5px','5px','5px']
+            let borderRadius = ['7px','7px','7px','7px']
             let height = 54
             let width = 54
             if(arr[i][j].value === ''){
@@ -84,18 +84,21 @@ export default function Tile2(props) {
                 height: '54px',
             }
             }
-            let borderWidth = ['2px','2px','2px','2px']
+            let borderWidth = ['4px','4px','4px','4px']
+
+            //side by side tiles
             if(j>0 && arr[i][j-1].value !== ''){
                 borderRadius[0] = '0px'
                 borderRadius[3] = '0px'
                 borderWidth[3] = '0px'
                 width += 2
             }
+            //up down tiles
             if(i>0 && arr[i-1][j].value !== ''){
                 borderRadius[0] = '0px'
                 borderRadius[1] = '0px'
                 borderWidth[0] = '0px'
-                height += 2
+                height += 4
             }
             if(j<arr[i].length-1 && arr[i][j+1].value !== ''){
                 borderRadius[1] = '0px'
@@ -107,15 +110,28 @@ export default function Tile2(props) {
                 borderRadius[2] = '0px'
                 borderRadius[3] = '0px'
                 borderWidth[2] = '0px'
-                height += 2
+                height += 4
             }
             
+            //const backgroundColor = "lightblue";
+            //const backgroundImage = 'url("src/assets/fulltile.png")'
+            //const backgroundSize = 'cover'
             
             return{width: `${width}px`,
                 height: `${height}px`,
-                border: 'red solid',
                 borderRadius: borderRadius.join(' '),
-                borderWidth: borderWidth.join(' ')}
+                borderWidth: borderWidth.join(' '),
+                borderColor: "#f1c52f",
+                borderStyle: 'solid',
+                backgroundColor: "#ffe27a",
+                //backgroundImage: backgroundImage,
+                //backgroundSize: backgroundSize,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '24px',
+                fontWeight: 'bold'
+            }
         }
         return (
             <>
