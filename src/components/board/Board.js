@@ -54,6 +54,7 @@ export default function Board(props) {
     }
 
     function handleClick(event){
+        console.log("picked up")
         const inner = event.target.innerHTML
         const [i,j,id] = event.target.id.split('_')
         

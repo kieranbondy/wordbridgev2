@@ -3,7 +3,7 @@
 }
 
 .board{
-    margin-top: 100px;
+    margin-top: 30px;
 }
 
 .empty-square{
@@ -33,6 +33,9 @@
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .start-square{

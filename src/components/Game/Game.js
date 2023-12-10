@@ -202,6 +202,9 @@ export default function Game() {
 
   return (
     <> 
+    <div className='title'>
+        WordBridge
+    </div>
     <div className='board-container'>
         <Board data={gameData.board} start={gameData.start} setGameData={setGameData}></Board>
     </div>
@@ -210,7 +213,7 @@ export default function Game() {
     </div>
 
     <div className='board-container'>
-        <button onClick={handleSubmit}>Submit</button>
+        <button className="submit-button" onClick={handleSubmit}>SUBMIT</button>
     </div>
     </>
   )
