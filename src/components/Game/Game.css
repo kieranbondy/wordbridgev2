@@ -3,6 +3,21 @@
     justify-content: center;
 }
 
+.button-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back-button {
+    width: 150px;
+    height: 40px;
+    background-color: lightgray;
+    border-radius: 7px;
+    border: 4px rgb(181, 181, 181) solid;
+    font-weight: bold;
+}
+
 .submit-button{
     width: 150px;
     height: 40px;

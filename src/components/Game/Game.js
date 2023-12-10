@@ -4,6 +4,8 @@ import LetterTray from '../LetterTray/LetterTray'
 import { generateBoard } from '../../functions/boardGeneration'
 import wordsData from '../../data/words.json'
 import './Game.css'
+import { Link } from 'react-router-dom'
+
 export default function Game() {
     //States: Tracking mouse data and overall game data
     const [isMouseDown, setIsMouseDown] = useState(false);
@@ -213,7 +215,12 @@ export default function Game() {
     </div>
 
     <div className='board-container'>
-        <button className="submit-button" onClick={handleSubmit}>SUBMIT</button>
+        <div className='button-container'>
+            <button className="submit-button" onClick={handleSubmit}>SUBMIT</button>
+            <Link to="/">
+                <button className='back-button'>BACK</button>
+            </Link>
+        </div>
     </div>
     </>
   )
