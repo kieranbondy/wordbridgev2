@@ -2,33 +2,39 @@
     display: flex;
 }
 
+.board{
+    margin-top: 100px;
+}
+
 .empty-square{
     width: 50px;
     height: 50px;
-    border: 3px #2f5899 solid;
-    margin: 1px;
-    border-radius: 5px;
-
+    border: 4px rgb(176, 176, 176) solid;
+    margin: 2px;
+    border-radius: 7px;
+    background-color: lightgray;
 }
 .rock-square{
     width: 50px;
     height: 50px;
     background-color: gray;
-    border: 3px #636363 solid;
-    margin: 1px;
-    border-radius: 5px;
+    border: 4px #636363 solid;
+    margin: 2px;
+    border-radius: 7px;
 
 }
 .letter-square{
     width: 50px;
     height: 50px;
-    background-color: #91622c;
-    border: 3px #5c3e1c solid;
-    margin: 1px;
-    border-radius: 5px;
-
-
+    background-color: #ffe27a;
+    border: 4px #f1c52f solid;
+    margin: 2px;
+    border-radius: 7px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
 }
+
 .start-square{
     width: 1px;
     height: 50px;

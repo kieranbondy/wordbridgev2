@@ -70,7 +70,8 @@ export default function Board(props) {
     return (
         <>
     {/* <div>{startArr.map((sq)=>(<div key={uuidv4()}>{sq}</div>))}</div> */}
-    <div>{board.map((row)=>(
+    
+    <div className="board">{board.map((row)=>(
         <div className='row' key={uuidv4()}>
         {row.map((space)=>(
             <div key={uuidv4()} onMouseDown={handleClick} onTouchStart={handleClick}>{space}</div>
