@@ -97,6 +97,7 @@ export default function Game() {
     
     //Getting the closest spaces to dropped tile and returning if it is within range
     function getClosest(x, y) {
+        //test
         // return "failure_failure_failure"
         const elements = document.querySelectorAll('[id*="play"], [id*="tile"]'); // Get elements with IDs containing "play"
         let closestElement = null;
