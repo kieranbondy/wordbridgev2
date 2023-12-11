@@ -7,9 +7,9 @@
 }
 
 .buttons{
-    display: flex;
-    flex-direction: column;
+    display: inline;
     align-items: center;
+    margin-top: 25px;
 }
 
 .buttons button{
@@ -21,8 +21,8 @@
 }
 
 .startButton {
-    background-color: #ffe27a;
-    border: 4px #f1c52f solid;
+    background-color: rgb(123, 187, 255);
+    border: 4px rgb(109, 165, 255) solid;
     border-radius: 7px;
 }
 
