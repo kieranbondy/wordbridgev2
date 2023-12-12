@@ -30,11 +30,12 @@ export default function Board(props) {
         let borderRadius = ['7px','7px','7px','7px']
         let borderWidth = ['4px','4px','4px','4px']
         let height = 50
-        let width = 54
+        let width = 50
         let marginleft = '2px'
         let marginright = '2px'
         let margintop = '2px'
         let marginbottom = '2px'
+        let paddingtop = '0px'
 
         console.log("inside match check")
         const currentID = data[row][col].id
@@ -49,7 +50,7 @@ export default function Board(props) {
                 borderRadius[2] = '0px'
                 borderWidth[1] = '0px'
                 marginright = '0px'
-                width += 2
+                width += 6
             }
         }
 
@@ -62,7 +63,7 @@ export default function Board(props) {
                 borderRadius[3] = '0px'
                 borderWidth[3] = '0px'
                 marginleft = '0px'
-                width += 2
+                width += 6
             }
         }
 
@@ -72,7 +73,7 @@ export default function Board(props) {
                 borderRadius[2] = '0px'
                 borderRadius[3] = '0px'
                 borderWidth[2] = '0px'
-                height += 4
+                height += 6
                 marginbottom = '0px'
             }
         }
@@ -83,7 +84,7 @@ export default function Board(props) {
                 borderRadius[0] = '0px'
                 borderRadius[1] = '0px'
                 borderWidth[0] = '0px'
-                height += 4
+                height += 6
                 margintop = '0px'
             }
         }
@@ -100,7 +101,8 @@ export default function Board(props) {
             marginRight: marginright,
             marginLeft: marginleft,
             marginBottom: marginbottom,
-            marginTop: margintop
+            marginTop: margintop,
+            paddingTop: paddingtop
         }
     }
 
