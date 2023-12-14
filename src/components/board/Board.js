@@ -56,15 +56,13 @@ export default function Board(props) {
     function handleClick(event){
         console.log("picked up")
         const inner = event.target.innerHTML
-        const [i,j,id] = event.target.id.split('_')
+        const id = event.target.id.split('_')[2]
         
         if(inner){
             props.setGameData((prev) => {
                 const [letter, newBoard] = getWholePiece(prev.board, id)
-                const newTray = prev.tray;
-                const temp = prev.board[i][j].id
-                newTray.push(letter)
-                return {...prev, tray:newTray, board:newBoard, pickedUpTile:[`${temp}_${newTray.length-1}`,event.clientX, event.clientY]}
+                props.pickUpTile(id,letter,false)
+                return {...prev, board:newBoard}
             })
         }
     }

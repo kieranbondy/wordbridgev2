@@ -1,13 +1,19 @@
 import './Tile.css' 
 //I need to pass in the starting point of the cursor so the letter knows to go there
 
-export default function Tile2(props) {
+export default function PickedUpTile(props) {
         const handleEvent = (event) => {
-            if(event.type === "mousedown" || event.type === "touchstart"){
-                props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true)           
+            console.log(event)
+            if(event.type === "mouseup"){
+                props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
-        }    
+            if(event.type === "touchend"){
+                const touch = event.changedTouches[0]
+                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
+            }
+        }
 
+        //TODO: refactor this into a file for helper functions
         function generateStyle(i,j,arr){
             let borderRadius = ['7px','7px','7px','7px']
             let height = 54
@@ -66,10 +72,9 @@ export default function Tile2(props) {
                 fontWeight: 'bold'
             }
         }
-
         return (
             <>
-            <div id={`${props.letters[0][0].id}_${props.index}_tile`} onMouseDown={handleEvent} onTouchStart={handleEvent} style={{cursor: 'grab'}}>
+            <div id={`${props.letters[0][0].id}_picked_up`} onMouseUp={handleEvent} onTouchEnd={handleEvent}>
             {props.letters.map((row, i) => {
                 return(
                     <div className='letterContainer'>
@@ -88,4 +93,3 @@ export default function Tile2(props) {
         </>
         );
 }
-
