@@ -57,7 +57,6 @@ export default function Board(props) {
         console.log("picked up")
         const inner = event.target.innerHTML
         const id = event.target.id.split('_')[2]
-        
         if(inner){
             props.setGameData((prev) => {
                 const [letter, newBoard] = getWholePiece(prev.board, id)

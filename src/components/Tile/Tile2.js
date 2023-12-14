@@ -4,7 +4,30 @@ import './Tile.css'
 export default function Tile2(props) {
         const handleEvent = (event) => {
             if(event.type === "mousedown" || event.type === "touchstart"){
-                props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true)           
+                const touch = event.touches[0]
+                props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true, touch) 
+                const onTouchMove = (event) => {
+                    if (event.cancelable) event.preventDefault(); // Prevent default touch action
+                    const touch = event.touches[0];
+                    props.setSelectedTile((prev) => {return {...prev, style:{
+                        ...prev.style,
+                        display: 'flex',
+                        position: 'absolute',
+                        left: `${touch.clientX-25}px`,
+                        top: `${touch.clientY-25}px`,
+                    }}});
+                  };
+                const onTouchEnd = (event) => {
+
+                    const touch = event.changedTouches[0]
+                    props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
+                    event.target.removeEventListener("touchmove", onTouchMove);
+                    event.target.removeEventListener("touchend", onTouchEnd);
+                    // handle touchend here
+                }
+                event.target.addEventListener("touchmove", onTouchMove);
+                event.target.addEventListener("touchend", onTouchEnd);
+                // handle touchstart here         
             }
         }    
 

@@ -8,6 +8,7 @@ export default function PickedUpTile(props) {
                 props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
             if(event.type === "touchend"){
+                console.log('end')
                 const touch = event.changedTouches[0]
                 props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
