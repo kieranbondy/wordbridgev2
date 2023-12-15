@@ -98,8 +98,8 @@ export default function Game() {
     }
     
     //Function to update the currently selected tile and remove it from the tray
-    function pickUpTile(id, letters, fromTray, touch){
-        setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${touch.clientX-25}px`,top: `${touch.clientY-25}px`,}}))
+    function pickUpTile(id, letters, fromTray, x, y){
+        setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
         let letter_id = id.split('_')[0]
         if(fromTray){
             const trayIndex = findTileFromTray(letter_id)[1]
@@ -207,7 +207,6 @@ export default function Game() {
 
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
-        console.log(getClosest(mousePosition.x, mousePosition.y).split('_'))
         const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_')
         if(type !== "failure"){
             if(type === 'play'){
@@ -252,7 +251,7 @@ export default function Game() {
         WordBridge
     </div>
     <div className='board-container'>
-        <Board data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
+        <Board setMousePosition={setMousePosition} setSelectedTile={setSelectedTile} data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
     </div>
     <div className='board-container'>
         <LetterTray setSelectedTile={setSelectedTile} isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown} pickUpTile={pickUpTile} setGameData={setGameData} setMousePosition={setMousePosition} letters={gameData.tray}></LetterTray>

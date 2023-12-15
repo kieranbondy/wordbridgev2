@@ -60,9 +60,44 @@ export default function Board(props) {
         if(inner){
             props.setGameData((prev) => {
                 const [letter, newBoard] = getWholePiece(prev.board, id)
-                props.pickUpTile(id,letter,false)
+                props.pickUpTile(id,letter,false, event.clientX, event.clientY)
                 return {...prev, board:newBoard}
             })
+        }
+    }
+    function handleTouch(event){
+        console.log("picked up with touch")
+        const inner = event.target.innerHTML
+        const id = event.target.id.split('_')[2]
+        if(inner){
+            const touch = event.touches[0];
+            props.setGameData((prev) => {
+                const [letter, newBoard] = getWholePiece(prev.board, id)
+                props.pickUpTile(id,letter,false, touch.clientX, touch.clientY)
+                return {...prev, board:newBoard}
+            })
+            const onTouchMove = (event) => {
+                // if (event.cancelable) event.preventDefault(); // Prevent default touch action
+                const touch = event.touches[0];
+                props.setSelectedTile((prev) => {return {...prev, style:{
+                    ...prev.style,
+                    display: 'flex',
+                    position: 'absolute',
+                    left: `${touch.clientX-25}px`,
+                    top: `${touch.clientY-25}px`,
+                }}});
+              };
+              
+              const onTouchEnd = (event) => {
+                const touch = event.changedTouches[0]
+                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
+                event.target.removeEventListener("touchmove", onTouchMove);
+                event.target.removeEventListener("touchend", onTouchEnd);
+                // handle touchend here
+            }
+
+            event.target.addEventListener("touchmove", onTouchMove);
+            event.target.addEventListener("touchend", onTouchEnd);
         }
     }
     return (
@@ -72,7 +107,7 @@ export default function Board(props) {
     <div className="board">{board.map((row)=>(
         <div className='row' key={uuidv4()}>
         {row.map((space)=>(
-            <div key={uuidv4()} onMouseDown={handleClick} onTouchStart={handleClick}>{space}</div>
+            <div key={uuidv4()} onMouseDown={handleClick} onTouchStart={handleTouch}>{space}</div>
         ))}
         </div>
     ))}</div>
