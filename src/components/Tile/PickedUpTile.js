@@ -3,7 +3,6 @@ import './Tile.css'
 
 export default function PickedUpTile(props) {
         const handleEvent = (event) => {
-            console.log(event)
             if(event.type === "mouseup"){
                 props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
@@ -77,10 +76,10 @@ export default function PickedUpTile(props) {
             <div id={`${props.letters[0][0].id}_picked_up`} onMouseUp={handleEvent} onTouchEnd={handleEvent}>
             {props.letters.map((row, i) => {
                 return(
-                    <div className='letterContainer'>
+                    <div key={i} className='letterContainer'>
                 {row.map((letter, j) =>{
                     return(
-                        <div style={generateStyle(i,j,props.letters)}>{letter.value}</div>
+                        <div key={j} style={generateStyle(i,j,props.letters)}>{letter.value}</div>
                     )
 
                 })}

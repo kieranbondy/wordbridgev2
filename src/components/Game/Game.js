@@ -98,8 +98,8 @@ export default function Game() {
     }
     
     //Function to update the currently selected tile and remove it from the tray
-    function pickUpTile(id, letters, fromTray){
-        setSelectedTile(prev => ({...prev, tile: letters, id:id}))
+    function pickUpTile(id, letters, fromTray, x, y){
+        setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
         let letter_id = id.split('_')[0]
         if(fromTray){
             const trayIndex = findTileFromTray(letter_id)[1]
@@ -186,6 +186,7 @@ export default function Game() {
         const handleMouseMove = (e) => {
             const newStyle = {
                 ...selectedTile.style,
+                display: 'flex',
                 position: 'absolute',
                 left: `${e.clientX-25}px`,
                 top: `${e.clientY-25}px`,
@@ -193,27 +194,13 @@ export default function Game() {
           setSelectedTile((prev) => {return {...prev, style:newStyle}});
         };
 
-        const handleTouchMove = (event) => {
-            event.preventDefault(); // Prevent default touch action
-            const touch = event.touches[0];
-            console.log(touch)
-            const newStyle = {
-                ...selectedTile.style,
-                position: 'absolute',
-                left: `${touch.clientX-25}px`,
-                top: `${touch.clientY-25}px`,
-            }
-            setSelectedTile((prev) => {return {...prev, style:newStyle}});
-          };
-    
+        
         // Add mousemove event listener when the component mounts
         document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
     
         // Clean up the event listener when the component unmounts
         return () => {
           document.removeEventListener('mousemove', handleMouseMove);
-          document.removeEventListener('touchmove', handleTouchMove);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -255,7 +242,7 @@ export default function Game() {
 
   return (
     <> 
-    <div style={selectedTile.style}>
+    <div id='picked-up' style={selectedTile.style}>
         {selectedTile.id !== '' &&
             <PickedUpTile id={selectedTile.id} setMousePosition={setMousePosition} letters={selectedTile.tile}></PickedUpTile>
         }   
@@ -264,10 +251,10 @@ export default function Game() {
         WordBridge
     </div>
     <div className='board-container'>
-        <Board data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
+        <Board setMousePosition={setMousePosition} setSelectedTile={setSelectedTile} data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
     </div>
     <div className='board-container'>
-        <LetterTray isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown} pickUpTile={pickUpTile} setGameData={setGameData} setMousePosition={setMousePosition} letters={gameData.tray}></LetterTray>
+        <LetterTray setSelectedTile={setSelectedTile} isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown} pickUpTile={pickUpTile} setGameData={setGameData} setMousePosition={setMousePosition} letters={gameData.tray}></LetterTray>
     </div>
 
     <div className='board-container'>
