@@ -1,41 +1,18 @@
 import './Tile.css' 
 //I need to pass in the starting point of the cursor so the letter knows to go there
 
-export default function Tile2(props) {
+export default function PickedUpTile(props) {
         const handleEvent = (event) => {
-            if(event.type === "touchstart"){
-                const touch = event.touches[0]
-                props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true, touch.clientX, touch.clientY)
-                
-                const onTouchMove = (event) => {
-                    if (event.cancelable) event.preventDefault(); // Prevent default touch action
-                    const touch = event.touches[0];
-                    props.setSelectedTile((prev) => {return {...prev, style:{
-                        ...prev.style,
-                        display: 'flex',
-                        position: 'absolute',
-                        left: `${touch.clientX-25}px`,
-                        top: `${touch.clientY-25}px`,
-                    }}});
-                  };
-                  
-                  const onTouchEnd = (event) => {
-                    const touch = event.changedTouches[0]
-                    props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
-                    event.target.removeEventListener("touchmove", onTouchMove);
-                    event.target.removeEventListener("touchend", onTouchEnd);
-                    // handle touchend here
-                }
-
-                event.target.addEventListener("touchmove", onTouchMove);
-                event.target.addEventListener("touchend", onTouchEnd);
+            if(event.type === "mouseup"){
+                props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
-            if(event.type === "mousedown"){
-                props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true, event.clientX, event.clientY) 
-                // handle touchstart here         
+            if(event.type === "touchend"){
+                const touch = event.changedTouches[0]
+                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
-        }    
+        }
 
+        //TODO: refactor this into a file for helper functions
         function generateStyle(i,j,arr){
             let borderRadius = ['7px','7px','7px','7px']
             let height = 54
@@ -94,16 +71,15 @@ export default function Tile2(props) {
                 fontWeight: 'bold'
             }
         }
-
         return (
             <>
-            <div id={`${props.letters[0][0].id}_${props.index}_tile`} onMouseDown={handleEvent} onTouchStart={handleEvent} style={{cursor: 'grab'}}>
+            <div id={`${props.letters[0][0].id}_picked_up`} onMouseUp={handleEvent} onTouchEnd={handleEvent}>
             {props.letters.map((row, i) => {
                 return(
                     <div key={i} className='letterContainer'>
                 {row.map((letter, j) =>{
                     return(
-                        <div key = {j} style={generateStyle(i,j,props.letters)}>{letter.value}</div>
+                        <div key={j} style={generateStyle(i,j,props.letters)}>{letter.value}</div>
                     )
 
                 })}
@@ -116,4 +92,3 @@ export default function Tile2(props) {
         </>
         );
 }
-
