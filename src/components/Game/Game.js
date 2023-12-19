@@ -11,7 +11,7 @@ export default function Game() {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0, letter_id:''})
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
-    const [gameData, setGameData] = useState({level:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
+    const [gameData, setGameData] = useState({level:1, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
 
 
     //Checking the validity of the submitted path
@@ -177,9 +177,7 @@ export default function Game() {
 
     // Initial game setup --> calls board generation
     useEffect(()=>{
-        const width = gameData.level + 2
-        const height = gameData.level + 2
-        const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level)
+        const [newBoard, newStart, newLetters] = generateBoard(gameData.width,gameData.height, gameData.level)
         setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters}})
     
         //Setting up movement tracking for tile placing
