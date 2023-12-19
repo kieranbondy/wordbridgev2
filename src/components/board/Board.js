@@ -13,15 +13,94 @@ export default function Board(props) {
         // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
             var letter = props.data[i][j].value
+            var id = props.data[i][j].id
+
             if(letter === 0){
                 board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
             } else if ( letter === 1){
                 board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
             } else{
-                board[i].push(<div className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>{letter}</div>)
+                checkMatchedTile(i, j, props.data)
+                board[i].push(<div style={checkMatchedTile(i, j, props.data)} className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>{letter}</div>)
             }
         }
     };
+
+    function checkMatchedTile(row, col, data){
+        let borderRadius = ['7px','7px','7px','7px']
+        let borderWidth = ['4px','4px','4px','4px']
+        let height = 50
+        let width = 50
+        let marginleft = '2px'
+        let marginright = '2px'
+        let margintop = '2px'
+        let marginbottom = '2px'
+        let paddingtop = '0px'
+
+        const currentID = data[row][col].id
+
+        //Checks if there is a tile with matching ID to the right
+        if (col < data[row].length - 1){
+            const rightID = data[row][col + 1].id
+            if (currentID === rightID){
+                borderRadius[1] = '0px'
+                borderRadius[2] = '0px'
+                borderWidth[1] = '0px'
+                marginright = '0px'
+                width += 6
+            }
+        }
+
+        //Checks if there is a tile with matching ID to the left
+        if (col > 0){
+            const leftID = data[row][col - 1].id
+            if (currentID === leftID){
+                borderRadius[0] = '0px'
+                borderRadius[3] = '0px'
+                borderWidth[3] = '0px'
+                marginleft = '0px'
+                width += 6
+            }
+        }
+
+        if (row < data.length-1){
+            const belowID = data[row+1][col].id
+            if (currentID === belowID){
+                borderRadius[2] = '0px'
+                borderRadius[3] = '0px'
+                borderWidth[2] = '0px'
+                height += 6
+                marginbottom = '0px'
+            }
+        }
+
+        if (row > 0){
+            const aboveID = data[row-1][col].id
+            if (currentID === aboveID){
+                borderRadius[0] = '0px'
+                borderRadius[1] = '0px'
+                borderWidth[0] = '0px'
+                height += 6
+                margintop = '0px'
+            }
+        }
+
+        return{
+            width: `${width}px`,
+            height: `${height}px`,
+            borderRadius: borderRadius.join(' '),
+            borderWidth: borderWidth.join(' '),
+            borderColor: "#f1c52f",
+            borderStyle: 'solid',
+            backgroundColor: "#ffe27a",
+            display: 'flex',
+            marginRight: marginright,
+            marginLeft: marginleft,
+            marginBottom: marginbottom,
+            marginTop: margintop,
+            paddingTop: paddingtop
+        }
+    }
 
     function getWholePiece(board,id){
         let output = []

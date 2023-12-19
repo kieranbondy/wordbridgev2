@@ -110,7 +110,8 @@ function generateLettersFromPath(path){
 
 function generateLetterTiles(grid,path){
     let max = path.length < 3 ? path.length : 3
-    let tileSize = Math.floor(Math.random() * max);
+    let tileSize = max-1
+    // let tileSize = Math.floor(Math.random() * max);
     const startRow = path[0].row;
     const startCol = path[0].column;
     const endRow = path[tileSize].row;
