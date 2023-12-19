@@ -38,17 +38,23 @@ export function generateBoard(width, height, level){
 
 function generateLettersFromPath(path){
     let grid = [...Array(5)].map(e => Array(5).fill(''));
+    console.log(path)
     let horizontal = path.length > 1 ? path[1].row - path[0].row === 0 : false
     let startingLetter = ''
     let length = 0
     let words = []
     let word
+    let redo = false;
     for(let i=1; i< path.length; i++){
         if(horizontal){
             if(path[i].row - path[i-1].row === 0){
                 length++
             } else {
                 word = getWord(length+1,startingLetter)
+                if(word === '0'){
+                    redo = true;
+                    break;
+                }
                 let start = path[i].column - (word.length-1)
                 for(let letter of word){
                     grid[path[i-1].row][start] = letter
@@ -64,6 +70,10 @@ function generateLettersFromPath(path){
                 length++
             } else {
                 word = getWord(length+1,startingLetter)
+                if(word === '0'){
+                    redo = true;
+                    break;
+                }
                 let start = path[i].row - (word.length-1)
                 for(let letter of word){
                     grid[start][path[i-1].column] = letter
@@ -88,9 +98,14 @@ function generateLettersFromPath(path){
             horizontal = !horizontal
         }
     }
-    console.log("Generated words: ", words)
-    console.log('TILES: ', generateLetterTiles(grid, path))
-    return generateLetterTiles(grid, path)
+    if(redo){
+        console.log('redo')
+        return generateLettersFromPath(path)
+    } else {
+        console.log("Generated words: ", words)
+        console.log('TILES: ', generateLetterTiles(grid, path))
+        return generateLetterTiles(grid, path)
+    } 
 }
 
 function generateLetterTiles(grid,path){
@@ -130,8 +145,8 @@ export function findRandomPath(grid, start) {
     const visited = new Array(rows).fill(false).map(() => new Array(cols).fill(false));
   
     // Define the possible moves (right, down, up, left)
-    const drow = [1, 0, -1, 0];
-    const dcolumn = [0, 1, 0, -1];
+    const drow = [1, 0];
+    const dcolumn = [0, 1];
   
     while (queue.length > 0) {
       // Randomly select an element from the queue
