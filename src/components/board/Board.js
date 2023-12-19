@@ -37,13 +37,10 @@ export default function Board(props) {
         let marginbottom = '2px'
         let paddingtop = '0px'
 
-        console.log("inside match check")
         const currentID = data[row][col].id
 
-        console.log(currentID)
         //Checks if there is a tile with matching ID to the right
         if (col < data[row].length - 1){
-            console.log("inside conditional")
             const rightID = data[row][col + 1].id
             if (currentID === rightID){
                 borderRadius[1] = '0px'
@@ -56,7 +53,6 @@ export default function Board(props) {
 
         //Checks if there is a tile with matching ID to the left
         if (col > 0){
-            console.log("inside conditional")
             const leftID = data[row][col - 1].id
             if (currentID === leftID){
                 borderRadius[0] = '0px'
@@ -115,7 +111,6 @@ export default function Board(props) {
             let hasValue = false
             for(let j=0; j<board[i].length; j++) {
                 let letter = board[i][j]
-                console.log("letter:", letter)
                 if(letter.id === id){
                     hasValue = true
                     boardCopy[i][j] = {id:'',value:0}
