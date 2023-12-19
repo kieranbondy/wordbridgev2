@@ -7,7 +7,7 @@ export function generateBoard(width, height, level){
     const grid = new Array(height).fill(null).map(() => {
         return new Array(width).fill(null).map(()=> { return {id: "", value: 0 }});
       });
-    const rocks = Math.floor(Math.random() * width);
+    const rocks = Math.floor((width+height+level%3)/2)-3;
     //adding rocks to the board
     for (let i = 0; i < rocks; i++) {
         const randomRow = Math.floor(Math.random() * height);
@@ -26,7 +26,8 @@ export function generateBoard(width, height, level){
     
     
     const path = findRandomPath(grid, {row:0,column:0})
-    const letters = generateLettersFromPath(path)
+    let letters = generateLettersFromPath(path, level)
+    letters = addRandomLetters(letters,level)
     // const letters = generateLetterTiles(letterPath)
     //Randomizes string and then turns string into array of characters
     // for (let index = 0; index < random-1; index++) {
@@ -36,9 +37,8 @@ export function generateBoard(width, height, level){
 }
 
 
-function generateLettersFromPath(path){
+function generateLettersFromPath(path, level){
     let grid = [...Array(5)].map(e => Array(5).fill(''));
-    console.log(path)
     let horizontal = path.length > 1 ? path[1].row - path[0].row === 0 : false
     let startingLetter = ''
     let length = 0
@@ -100,18 +100,17 @@ function generateLettersFromPath(path){
     }
     if(redo){
         console.log('redo')
-        return generateLettersFromPath(path)
+        return generateLettersFromPath(path, level)
     } else {
         console.log("Generated words: ", words)
-        console.log('TILES: ', generateLetterTiles(grid, path))
-        return generateLetterTiles(grid, path)
+        // console.log('TILES: ', generateLetterTiles(grid, path))
+        return generateLetterTiles(grid, path, level)
     } 
 }
 
-function generateLetterTiles(grid,path){
+function generateLetterTiles(grid,path, level){
     let max = path.length < 3 ? path.length : 3
-    let tileSize = max-1
-    // let tileSize = Math.floor(Math.random() * max);
+    let tileSize = weightedRandom(level, max);
     const startRow = path[0].row;
     const startCol = path[0].column;
     const endRow = path[tileSize].row;
@@ -124,10 +123,54 @@ function generateLetterTiles(grid,path){
     if(restOfPath.length === 0){
         return [[...subArray]]
     } else {
-        return [[...subArray], ...generateLetterTiles(grid, restOfPath)];
+        return [[...subArray], ...generateLetterTiles(grid, restOfPath, level)];
     }
     
 
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function addRandomLetters(letters,level){
+    let numOfLetters = 3-level%4
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    for(let i =0; i<numOfLetters;i++){
+        let id = uuidv4()
+        letters.push( [[{id:id, value:alphabet[Math.floor(Math.random() * alphabet.length)]}]] )
+    }
+
+    return(letters)
+
+}
+
+function weightedRandom(level, max) {
+    let three = 3-max === 0 ? (level*2)/100 : 0
+    let two = max-2 >= 0 ? (level*4)/100 : 0
+    let one = 1-two-three
+    // Generate a random number between 0 and 1
+    const rand = Math.random();
+    // Define the weighted probabilities
+    const probabilities = {
+        0: one, 
+        1: two, 
+        2: three
+    };
+
+    // Initialize the cumulative probability
+    let cumulativeProbability = 0;
+
+    // Iterate through the probabilities and check where the random number falls
+    for (const number in probabilities) {
+        cumulativeProbability += probabilities[number];
+        if (rand <= cumulativeProbability) {
+            return parseInt(number); // Convert the selected number to an integer
+        }
+    }
 }
 
 //X and Y are inverted in this function need to fix it

@@ -94,6 +94,33 @@ export default function Game() {
     //TODO: handle transition to next level
     function handleSubmit() {
         let [valid, words] = checkValid(gameData.board)
+        if(valid){
+
+            let width = gameData.width
+            let height = gameData.height
+            if(Math.floor(gameData.level/3) === gameData.width+gameData.height -5){
+                // Randomly decide whether to increase height or width
+                if (Math.random() < 0.5) {
+                    // Increase height by one if it's less than or equal to width
+                    if (height <= width) {
+                        height++;
+                    } else {
+                        // Increase width by one if it's less than height
+                        width++;
+                    }
+                } else {
+                    // Increase width by one if it's less than or equal to height
+                    if (width <= height) {
+                        width++;
+                    } else {
+                        // Increase height by one if it's less than width
+                        height++;
+                    }
+                }
+            }
+            const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level+1)
+            setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters, width:width, height:height, level:prevData.level+1}})
+        }
         console.log(`This is a valid solution: ${valid} using the words ${words}`)
     }
     
@@ -221,7 +248,6 @@ export default function Game() {
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
         const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_')
-        console.log(first, second, type)
         if(type !== "failure"){
             if(type === 'play'){
                 //Check for overlapping tiles
@@ -231,9 +257,7 @@ export default function Game() {
                 setGameData((prevData) =>{
                     let boardCopy = [...prevData.board];
                     boardCopy = updateBoard(boardCopy,selectedTile.tile,first,second);
-                    console.log("boardCopy:", boardCopy)
-                    if (boardCopy == false){
-                        console.log("DONT FUCKING PLACE")
+                    if (boardCopy === false){
                         const updatedTray = [...prevData.tray]
                         updatedTray.push(selectedTile.tile)
                         return {...prevData, board: prevData.board, tray: updatedTray }
