@@ -161,18 +161,33 @@ export default function Game() {
     function updateBoard(board,tile,first,second){
         let y = first-1
         let x = second-1
-        let outcome = board
+        let outcome = JSON.parse(JSON.stringify(board))
+        let tileCheck = true
+
         tile.forEach(element => {
+            if(y >= outcome.length - 1){
+                tileCheck = false
+                return
+            }
             y++
             x = second-1
             element.forEach(letter => {
+                if (x >= outcome[y].length - 1){
+                    tileCheck = false
+                    return
+                }
+                
                 x++
                 if(letter.value){
-                    outcome[y][x] = letter
+                    if(outcome[y][x].value !== 0){
+                        tileCheck = false
+                    }else{
+                        outcome[y][x] = letter
+                    }
                 }
             })
         });
-        return outcome;
+        return tileCheck ? outcome:false;
     }
 
     // Initial game setup --> calls board generation
@@ -208,13 +223,26 @@ export default function Game() {
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
         const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_')
+        console.log(first, second, type)
         if(type !== "failure"){
             if(type === 'play'){
+                //Check for overlapping tiles
+
                 //Placing letter on game board
+                console.log("placing letter")
                 setGameData((prevData) =>{
                     let boardCopy = [...prevData.board];
                     boardCopy = updateBoard(boardCopy,selectedTile.tile,first,second);
-                    return { ...prevData, board: boardCopy};
+                    console.log("boardCopy:", boardCopy)
+                    if (boardCopy == false){
+                        console.log("DONT FUCKING PLACE")
+                        const updatedTray = [...prevData.tray]
+                        updatedTray.push(selectedTile.tile)
+                        return {...prevData, board: prevData.board, tray: updatedTray }
+                    } else{
+                        return { ...prevData, board: boardCopy};
+                    }
+                    
                 })
             } else if(type === 'tile'){
                 //TODO Improve this maybe depending on what half ot the screen you are on it will place the tile on that end of the tray
@@ -227,8 +255,16 @@ export default function Game() {
                     return { ...prevData, tray: updatedTray };
                   });
             }
+            else {
+                setGameData((prevData) => {
+                    const updatedTray = [...prevData.tray]
+                    updatedTray.push(selectedTile.tile)
+                    return {...prevData, tray: updatedTray }
+                })
+            }
             
         } else if(selectedTile.id !== '') {
+            console.log("return to tray")
             setGameData((prevData) => {
                 const updatedTray = [...prevData.tray]
                 updatedTray.push(selectedTile.tile)
