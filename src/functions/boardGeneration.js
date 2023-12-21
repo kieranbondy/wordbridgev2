@@ -135,7 +135,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
-
+//TODO Add different letter shapes
 function addRandomLetters(letters,level){
     let numOfLetters = 3-level%4
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
