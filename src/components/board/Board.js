@@ -13,7 +13,6 @@ export default function Board(props) {
         // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
             var letter = props.data[i][j].value
-            var id = props.data[i][j].id
 
             if(letter === 0){
                 board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
