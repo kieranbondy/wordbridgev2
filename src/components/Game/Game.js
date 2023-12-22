@@ -126,17 +126,20 @@ export default function Game() {
     
     //Function to update the currently selected tile and remove it from the tray
     function pickUpTile(id, letters, fromTray, x, y){
-        setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
-        let letter_id = id.split('_')[0]
-        if(fromTray){
-            const trayIndex = findTileFromTray(letter_id)[1]
-            setGameData((prevData) =>{
-                const trayCopy = [...prevData.tray];
-                trayCopy.splice(parseInt(trayIndex), 1)
-                return { ...prevData, tray: trayCopy };
-            })
+        //ERROR ON LINE 131
+        if (id){
+            setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
+            let letter_id = id.split('_')[0]
+
+            if(fromTray){
+                const trayIndex = findTileFromTray(letter_id)[1]
+                setGameData((prevData) =>{
+                    const trayCopy = [...prevData.tray];
+                    trayCopy.splice(parseInt(trayIndex), 1)
+                    return { ...prevData, tray: trayCopy };
+                })
+            }
         }
-        
     }
     
     //Getting the closest spaces to dropped tile and returning if it is within range

@@ -1,4 +1,6 @@
 import sorted_words from '../data/words_sorted.json'
+import point_dict from '../data/point_values.json'
+
 const { v4: uuidv4 } = require('uuid');
 
 //This function creates an empty game board
@@ -118,7 +120,7 @@ function generateLetterTiles(grid,path, level){
     const id = uuidv4();
     const subArray = grid.slice(startRow, endRow+1).map(row => 
         row.slice(startCol, endCol+1).map(val => 
-            ({id:id, value:val})));
+            ({id:id, value:val, point:point_dict[val]})));
     let restOfPath = path.slice(tileSize+1)
     if(restOfPath.length === 0){
         return [[...subArray]]
@@ -139,9 +141,10 @@ function shuffleArray(array) {
 function addRandomLetters(letters,level){
     let numOfLetters = 3-level%4
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let val = alphabet[Math.floor(Math.random() * alphabet.length)]
     for(let i =0; i<numOfLetters;i++){
         let id = uuidv4()
-        letters.push( [[{id:id, value:alphabet[Math.floor(Math.random() * alphabet.length)]}]] )
+        letters.push( [[{id:id, value:val, point:point_dict[val]}]] )
     }
 
     return(letters)

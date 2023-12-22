@@ -9,6 +9,24 @@
 .wholePiece{
     display: flex;
 }
+.tile-divider{
+    width: 25%;
+    pointer-events: none;
+}
+
+.tile-value{
+    text-align: center;
+    width: 50%;
+    pointer-events: none;
+}
+
+.tile-point{
+    margin-top: 70%;
+    text-align: center;
+    font-size: 12px;
+    width: 25%;
+    pointer-events: none;
+}
 
 .row{
     display: flex;
