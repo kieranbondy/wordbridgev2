@@ -79,7 +79,11 @@ export default function PickedUpTile(props) {
                     <div key={i} className='letterContainer'>
                 {row.map((letter, j) =>{
                     return(
-                        <div key={j} style={generateStyle(i,j,props.letters)}>{letter.value}</div>
+                        <div key={j} style={generateStyle(i,j,props.letters)}>
+                            <div className='tile-divider' ></div>
+                            <div className='tile-value'>{letter.value}</div>
+                            <div className='tile-point'>{letter.point}</div>
+                            </div>
                     )
 
                 })}

@@ -13,6 +13,7 @@ export default function Board(props) {
         // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
             var letter = props.data[i][j].value
+            var point_val = props.data[i][j].point
 
             if(letter === 0){
                 board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
@@ -20,7 +21,12 @@ export default function Board(props) {
                 board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
             } else{
                 checkMatchedTile(i, j, props.data)
-                board[i].push(<div style={checkMatchedTile(i, j, props.data)} className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>{letter}</div>)
+                board[i].push(
+                <div style={checkMatchedTile(i, j, props.data)} className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>
+                    <div className='tile-divider'></div>
+                    <div className='tile-value'>{letter}</div>
+                    <div className='tile-point'>{point_val}</div>
+                    </div>)
             }
         }
     };
