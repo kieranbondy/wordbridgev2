@@ -129,12 +129,24 @@ function generateLetterTiles(grid,path, level){
 
 }
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
     }
-}
+  
+    return array;
+  }
+
 //TODO Add different letter shapes
 function addRandomLetters(letters,level){
     let numOfLetters = 3-level%4
@@ -144,7 +156,7 @@ function addRandomLetters(letters,level){
         letters.push( [[{id:id, value:alphabet[Math.floor(Math.random() * alphabet.length)]}]] )
     }
 
-    return(letters)
+    return(shuffle(letters))
 
 }
 
