@@ -10,21 +10,21 @@
     display: flex;
 }
 .tile-divider{
-    width: 25%;
+    width: 30%;
     pointer-events: none;
 }
 
 .tile-value{
     text-align: center;
-    width: 50%;
+    width: 40%;
     pointer-events: none;
 }
 
 .tile-point{
-    margin-top: 70%;
+    margin-top: 60%;
     text-align: center;
     font-size: 12px;
-    width: 25%;
+    width: 30%;
     pointer-events: none;
 }
 
