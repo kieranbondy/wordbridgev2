@@ -13,20 +13,21 @@ export default function Board(props) {
         // startArr.push(i === props.start ? <div className='start-square'></div>:<div className='empty-start-square'></div>)
         for (let j=0; j<width; j++){
             var letter = props.data[i][j].value
+            var point_val = props.data[i][j].point
 
             if(letter === 0){
-                if(props.data[i][j].final){
-                    board[i].push(<div className='empty-square-final' id={`${i}_${j}_play`}></div>)
-                } else {
-                    board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
-                }
+                board[i].push(<div className={props.data[i][j].final ? 'empty-square-final':'empty-square'} id={`${i}_${j}_play`}></div>)
             }
             else if ( letter === 1){
                 board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
-            } else{
+            } else {
                 checkMatchedTile(i, j, props.data)
-                //TODO CALLUM add check for if tile is final and then style accordingly
-                board[i].push(<div style={checkMatchedTile(i, j, props.data)} className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>{letter}</div>)
+                board[i].push(
+                <div style={checkMatchedTile(i, j, props.data)} className={props.data[i][j].final ? 'letter-square-final':'letter-square'} id={`${i}_${j}_${props.data[i][j].id}_play`}>
+                    <div className='tile-divider'></div>
+                    <div className='tile-value'>{letter}</div>
+                    <div className='tile-point'>{point_val}</div>
+                    </div>)
             }
         }
     };
@@ -95,7 +96,6 @@ export default function Board(props) {
             height: `${height}px`,
             borderRadius: borderRadius.join(' '),
             borderWidth: borderWidth.join(' '),
-            borderColor: "#f1c52f",
             borderStyle: 'solid',
             backgroundColor: "#ffe27a",
             display: 'flex',

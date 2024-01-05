@@ -91,27 +91,37 @@ export default function Tile2(props) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontSize: '24px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
             }
         }
 
         return (
             <>
-            <div id={`${props.letters[0][0].id}_${props.index}_tile`} onMouseDown={handleEvent} onTouchStart={handleEvent} style={{cursor: 'grab'}}>
+            <div 
+            id={`${props.letters[0][0].id}_${props.index}_tile`} 
+            onMouseDown={handleEvent} onTouchStart={handleEvent} 
+            style={{cursor: 'grab'}}>
+
             {props.letters.map((row, i) => {
                 return(
                     <div key={i} className='letterContainer'>
-                {row.map((letter, j) =>{
-                    return(
-                        <div key = {j} style={generateStyle(i,j,props.letters)}>{letter.value}</div>
-                    )
+                        {row.map((letter, j) =>{
+                        return(
+                            <div key = {j} 
+                                style={generateStyle(i,j,props.letters)}>
+                                <div className='tile-divider' ></div>
+                                <div className='tile-value'>{letter.value}</div>
+                                <div className='tile-point'>{letter.point}</div>
+                            </div>
+                            )
 
-                })}
-                </div>
-                )
-            })}
+                        })}
+                    </div>
+                    )
+                }
+            )}
                 
-                </div>  
+            </div>  
         
         </>
         );

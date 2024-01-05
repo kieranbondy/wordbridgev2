@@ -12,17 +12,20 @@ export default function Game() {
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0, letter_id:''})
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
     const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
+    const [score, setScore] = useState(0)
 
 
     //Checking the validity of the submitted path
     function checkValid() {
         let board = JSON.parse(JSON.stringify(gameData.board))
         let output = []
+        let totalPoints = 0;
         for(let i = 0; i <board.length; i++){
             for(let j = 0; j < board[0].length;j++){
                 let letter = board[i][j]
                 if(typeof letter.value === 'string'){
                     output.push({letter:letter.value, row:i, column:j, final: letter.final})
+                    totalPoints += letter.point
                 }
             }
         }
@@ -91,14 +94,14 @@ export default function Game() {
                 }
             }
         }
-        return [valid, words];
+        return [valid, words, totalPoints];
     }
 
     //TODO: handle transition to next level
     function handleSubmit() {
-        let [valid, words] = checkValid(gameData.board)
+        let [valid, words, points] = checkValid(gameData.board)
         if(valid){
-
+            setScore((prev) => { return prev+points})
             let width = gameData.width
             let height = gameData.height
             let level = gameData.level + 1
@@ -125,23 +128,25 @@ export default function Game() {
             const [newBoard, newStart, newLetters] = generateBoard(width,height, level)
             setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters, width:width, height:height, level:level}})
         }
-        console.log(`This is a valid solution: ${valid} using the words ${words}`)
+        console.log(`This is a valid solution: ${valid} using the words ${words} worth ${points} points`)
     }
     
     //Function to update the currently selected tile and remove it from the tray
     function pickUpTile(id, letters, fromTray, x, y){
-        if(id){
-        setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
-        let letter_id = id.split('_')[0]
-        if(fromTray){
-            const trayIndex = findTileFromTray(letter_id)[1]
-            setGameData((prevData) =>{
-                const trayCopy = [...prevData.tray];
-                trayCopy.splice(parseInt(trayIndex), 1)
-                return { ...prevData, tray: trayCopy };
-            })
+        //ERROR ON LINE 131
+        if (id){
+            setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
+            let letter_id = id.split('_')[0]
+
+            if(fromTray){
+                const trayIndex = findTileFromTray(letter_id)[1]
+                setGameData((prevData) =>{
+                    const trayCopy = [...prevData.tray];
+                    trayCopy.splice(parseInt(trayIndex), 1)
+                    return { ...prevData, tray: trayCopy };
+                })
+            }
         }
-    }
     }
     
     //Getting the closest spaces to dropped tile and returning if it is within range
@@ -315,6 +320,9 @@ export default function Game() {
     </div>
     <div className='title'>
         WordBridge
+    </div>
+    <div className='title'>
+        {score}
     </div>
     <div className='board-container'>
         <Board setMousePosition={setMousePosition} setSelectedTile={setSelectedTile} data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
