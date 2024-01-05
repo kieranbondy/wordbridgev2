@@ -11,7 +11,7 @@ export default function Game() {
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0, letter_id:''})
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
-    const [gameData, setGameData] = useState({level:1, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
+    const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
 
 
     //Checking the validity of the submitted path
@@ -20,8 +20,9 @@ export default function Game() {
         let output = []
         for(let i = 0; i <board.length; i++){
             for(let j = 0; j < board[0].length;j++){
-                if(typeof board[i][j].value === 'string'){
-                    output.push({letter:board[i][j].value, row:i, column:j})
+                let letter = board[i][j]
+                if(typeof letter.value === 'string'){
+                    output.push({letter:letter.value, row:i, column:j, final: letter.final})
                 }
             }
         }
@@ -30,52 +31,54 @@ export default function Game() {
         }
         let words = [output[0].letter]
         let wordIndex = 0
-        let valid = output.length > 1 && output[0].column === 0;
+        let valid = Boolean(output.length > 1 && output[0].column === 0 && output[output.length-1].final);
         let horizontal = output.length > 1 ? output[1].row - output[0].row === 0 : false
-        for(let i=1;i<output.length;i++){
-            if(i<output.length-1){
-                if(Math.abs(output[i-1].row - output[i].row) + Math.abs(output[i-1].column - output[i].column) !== 1){
-                    valid = false
-                    break
-                } else {
-                    if(horizontal){
-                        if(output[i-1].row - output[i].row === 0){
-                            words[wordIndex] += output[i].letter
-                        } else {
-                            horizontal = !horizontal
-                            wordIndex ++
-                            words[wordIndex] = output[i-1].letter + output[i].letter
-                        }
+        if(valid){
+            for(let i=1;i<output.length;i++){
+                if(i<output.length-1){
+                    if(Math.abs(output[i-1].row - output[i].row) + Math.abs(output[i-1].column - output[i].column) !== 1){
+                        valid = false
+                        break
                     } else {
-                        if(output[i-1].column - output[i].column === 0){
-                            words[wordIndex] += output[i].letter
+                        if(horizontal){
+                            if(output[i-1].row - output[i].row === 0){
+                                words[wordIndex] += output[i].letter
+                            } else {
+                                horizontal = !horizontal
+                                wordIndex ++
+                                words[wordIndex] = output[i-1].letter + output[i].letter
+                            }
                         } else {
-                            horizontal = !horizontal
-                            wordIndex ++
-                            words[wordIndex] = output[i-1].letter + output[i].letter
+                            if(output[i-1].column - output[i].column === 0){
+                                words[wordIndex] += output[i].letter
+                            } else {
+                                horizontal = !horizontal
+                                wordIndex ++
+                                words[wordIndex] = output[i-1].letter + output[i].letter
+                            }
                         }
                     }
-                }
-            } else {
-                if(output[i].column !== board[0].length-1){
-                    valid = false
-                    break
                 } else {
-                    if(horizontal){
-                        if(output[i-1].row - output[i].row === 0){
-                            words[wordIndex] += output[i].letter
-                        } else {
-                            horizontal = !horizontal
-                            wordIndex ++
-                            words[wordIndex] = output[i-1].letter + output[i].letter
-                        }
+                    if(output[i].column !== board[0].length-1){
+                        valid = false
+                        break
                     } else {
-                        if(output[i-1].column - output[i].column === 0){
-                            words[wordIndex] += output[i].letter
+                        if(horizontal){
+                            if(output[i-1].row - output[i].row === 0){
+                                words[wordIndex] += output[i].letter
+                            } else {
+                                horizontal = !horizontal
+                                wordIndex ++
+                                words[wordIndex] = output[i-1].letter + output[i].letter
+                            }
                         } else {
-                            horizontal = !horizontal
-                            wordIndex ++
-                            words[wordIndex] = output[i-1].letter + output[i].letter
+                            if(output[i-1].column - output[i].column === 0){
+                                words[wordIndex] += output[i].letter
+                            } else {
+                                horizontal = !horizontal
+                                wordIndex ++
+                                words[wordIndex] = output[i-1].letter + output[i].letter
+                            }
                         }
                     }
                 }
@@ -98,7 +101,8 @@ export default function Game() {
 
             let width = gameData.width
             let height = gameData.height
-            if(Math.floor(gameData.level/3) === gameData.width+gameData.height -5){
+            let level = gameData.level + 1
+            if(level%3 === 0){
                 // Randomly decide whether to increase height or width
                 if (Math.random() < 0.5) {
                     // Increase height by one if it's less than or equal to width
@@ -118,14 +122,15 @@ export default function Game() {
                     }
                 }
             }
-            const [newBoard, newStart, newLetters] = generateBoard(width,height, gameData.level+1)
-            setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters, width:width, height:height, level:prevData.level+1}})
+            const [newBoard, newStart, newLetters] = generateBoard(width,height, level)
+            setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters, width:width, height:height, level:level}})
         }
         console.log(`This is a valid solution: ${valid} using the words ${words}`)
     }
     
     //Function to update the currently selected tile and remove it from the tray
     function pickUpTile(id, letters, fromTray, x, y){
+        if(id){
         setSelectedTile(prev => ({...prev, tile: letters, id:id, style:{...prev.style, left: `${x-25}px`,top: `${y-25}px`,}}))
         let letter_id = id.split('_')[0]
         if(fromTray){
@@ -136,7 +141,7 @@ export default function Game() {
                 return { ...prevData, tray: trayCopy };
             })
         }
-        
+    }
     }
     
     //Getting the closest spaces to dropped tile and returning if it is within range
@@ -206,10 +211,13 @@ export default function Game() {
                 
                 x++
                 if(letter.value){
-                    if(outcome[y][x].value !== 0){
-                        tileCheck = false
-                    }else{
+                    if(outcome[y][x].value === 0){
+                        if(outcome[y][x].final){
+                            letter['final'] = true
+                        }
                         outcome[y][x] = letter
+                    }else{
+                        tileCheck = false
                     }
                 }
             })

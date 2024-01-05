@@ -5,9 +5,9 @@ const { v4: uuidv4 } = require('uuid');
 export function generateBoard(width, height, level){
     //creating array of unique objects
     const grid = new Array(height).fill(null).map(() => {
-        return new Array(width).fill(null).map(()=> { return {id: "", value: 0 }});
+        return new Array(width).fill(null).map(()=> { return {id: "", value: 0, final:false }});
       });
-    const rocks = Math.floor((width+height+level%3)/2)-3;
+    const rocks = Math.floor(width*height*((level%3+1)/10));
     //adding rocks to the board
     for (let i = 0; i < rocks; i++) {
         const randomRow = Math.floor(Math.random() * height);
@@ -26,19 +26,22 @@ export function generateBoard(width, height, level){
     
     
     const path = findRandomPath(grid, {row:0,column:0})
-    let letters = generateLettersFromPath(path, level)
+    let last = path[path.length-1]
+    grid[last.row][last.column] =  {id: "", value: 0, final:true }
+    let letters = generateLettersFromPath(path, level,width,height)
     letters = addRandomLetters(letters,level)
     // const letters = generateLetterTiles(letterPath)
     //Randomizes string and then turns string into array of characters
     // for (let index = 0; index < random-1; index++) {
     //     lettersList=lettersList+alphabet[Math.floor(Math.random() * alphabet.length)] 
     // }
-    return [grid,first, letters];
+    return [grid,last, letters];
 }
 
 
-function generateLettersFromPath(path, level){
-    let grid = [...Array(5)].map(e => Array(5).fill(''));
+function generateLettersFromPath(path, level, width, height){
+    console.log(path)
+    let grid = [...Array(height)].map(e => Array(width).fill(''));
     let horizontal = path.length > 1 ? path[1].row - path[0].row === 0 : false
     let startingLetter = ''
     let length = 0
@@ -149,11 +152,11 @@ function shuffle(array) {
 
 //TODO Add different letter shapes
 function addRandomLetters(letters,level){
-    let numOfLetters = 3-level%4
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let numOfLetters = 4-(level%3)
+    const alphabet = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNOOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWXYYZ"
     for(let i =0; i<numOfLetters;i++){
         let id = uuidv4()
-        letters.push( [[{id:id, value:alphabet[Math.floor(Math.random() * alphabet.length)]}]] )
+        letters.push( [[{id:id, value:alphabet[Math.floor(Math.random() * alphabet.length)], final:false}]] )
     }
 
     return(shuffle(letters))
@@ -244,7 +247,7 @@ export function findRandomPath(grid, start) {
 
 
 function getWord(length, startingLetter){
-    const alphabet = "abcdefghijklmnopqrstuvwxyz"
+    const alphabet = "aaaaaaaaabbccddddeeeeeeeeeeeeeffggghhiiiiiiiiijkllllmmnnnnoooooooooppqrrrrrrssssttttttuuuuvvwxyyz"
     if(length > 1){
         if(startingLetter === ''){
             startingLetter = alphabet[Math.floor(Math.random() * alphabet.length)]
