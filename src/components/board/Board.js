@@ -16,13 +16,14 @@ export default function Board(props) {
             var point_val = props.data[i][j].point
 
             if(letter === 0){
-                board[i].push(<div className='empty-square' id={`${i}_${j}_play`}></div>)
-            } else if ( letter === 1){
+                board[i].push(<div className={props.data[i][j].final ? 'empty-square-final':'empty-square'} id={`${i}_${j}_play`}></div>)
+            }
+            else if ( letter === 1){
                 board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
-            } else{
+            } else {
                 checkMatchedTile(i, j, props.data)
                 board[i].push(
-                <div style={checkMatchedTile(i, j, props.data)} className='letter-square' id={`${i}_${j}_${props.data[i][j].id}_play`}>
+                <div style={checkMatchedTile(i, j, props.data)} className={props.data[i][j].final ? 'letter-square-final':'letter-square'} id={`${i}_${j}_${props.data[i][j].id}_play`}>
                     <div className='tile-divider'></div>
                     <div className='tile-value'>{letter}</div>
                     <div className='tile-point'>{point_val}</div>
@@ -95,7 +96,6 @@ export default function Board(props) {
             height: `${height}px`,
             borderRadius: borderRadius.join(' '),
             borderWidth: borderWidth.join(' '),
-            borderColor: "#f1c52f",
             borderStyle: 'solid',
             backgroundColor: "#ffe27a",
             display: 'flex',
@@ -111,6 +111,7 @@ export default function Board(props) {
         let output = []
         let boardCopy = JSON.parse(JSON.stringify(board));
         let occurences = []
+        console.log('callced')
         for(let i=0; i<board.length; i++) {
             let row = []
             let hasValue = false
@@ -118,8 +119,9 @@ export default function Board(props) {
                 let letter = board[i][j]
                 if(letter.id === id){
                     hasValue = true
-                    boardCopy[i][j] = {id:'',value:0}
+                    boardCopy[i][j] = {id:'',value:0,final:letter.final}
                     occurences.push(j)
+                    letter.final = false
                     row.push(letter)
                 } else {
                     row.push({id:'',value:''})
@@ -142,8 +144,8 @@ export default function Board(props) {
         const inner = event.target.innerHTML
         const id = event.target.id.split('_')[2]
         if(inner){
+            const [letter, newBoard] = getWholePiece(props.data, id)
             props.setGameData((prev) => {
-                const [letter, newBoard] = getWholePiece(prev.board, id)
                 props.pickUpTile(id,letter,false, event.clientX, event.clientY)
                 return {...prev, board:newBoard}
             })
