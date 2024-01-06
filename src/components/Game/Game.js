@@ -2,10 +2,11 @@ import React, {useState, useEffect} from 'react'
 import Board from '../board/Board'
 import LetterTray from '../LetterTray/LetterTray'
 import { generateBoard } from '../../functions/boardGeneration'
-import wordsData from '../../data/words.json'
 import './Game.css'
 import { Link } from 'react-router-dom'
 import PickedUpTile from '../Tile/PickedUpTile'
+import { checkValid, getClosest } from '../../functions/helpers'
+
 export default function Game() {
     //States: Tracking mouse data and overall game data
     const [isMouseDown, setIsMouseDown] = useState(false);
@@ -13,89 +14,42 @@ export default function Game() {
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
     const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
     const [score, setScore] = useState(0)
+    const [isPhone, setIsPhone] = useState(false)
 
 
-    //Checking the validity of the submitted path
-    function checkValid() {
-        let board = JSON.parse(JSON.stringify(gameData.board))
-        let output = []
-        let totalPoints = 0;
-        for(let i = 0; i <board.length; i++){
-            for(let j = 0; j < board[0].length;j++){
-                let letter = board[i][j]
-                if(typeof letter.value === 'string'){
-                    output.push({letter:letter.value, row:i, column:j, final: letter.final})
-                    totalPoints += letter.point
-                }
+    // Initial game setup --> calls board generation
+    useEffect(()=>{
+        const [newBoard, newStart, newLetters] = generateBoard(gameData.width,gameData.height, gameData.level)
+        setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters}})
+    
+        //Setting up movement tracking for tile placing
+        const handleMouseMove = (e) => {
+            const newStyle = {
+                ...selectedTile.style,
+                display: 'flex',
+                position: 'absolute',
+                left: `${e.clientX-25}px`,
+                top: `${e.clientY-25}px`,
             }
-        }
-        if(output.length === 0){
-            return [false, null]
-        }
-        let words = [output[0].letter]
-        let wordIndex = 0
-        let valid = Boolean(output.length > 1 && output[0].column === 0 && output[output.length-1].final);
-        let horizontal = output.length > 1 ? output[1].row - output[0].row === 0 : false
-        if(valid){
-            for(let i=1;i<output.length;i++){
-                if(i<output.length-1){
-                    if(Math.abs(output[i-1].row - output[i].row) + Math.abs(output[i-1].column - output[i].column) !== 1){
-                        valid = false
-                        break
-                    } else {
-                        if(horizontal){
-                            if(output[i-1].row - output[i].row === 0){
-                                words[wordIndex] += output[i].letter
-                            } else {
-                                horizontal = !horizontal
-                                wordIndex ++
-                                words[wordIndex] = output[i-1].letter + output[i].letter
-                            }
-                        } else {
-                            if(output[i-1].column - output[i].column === 0){
-                                words[wordIndex] += output[i].letter
-                            } else {
-                                horizontal = !horizontal
-                                wordIndex ++
-                                words[wordIndex] = output[i-1].letter + output[i].letter
-                            }
-                        }
-                    }
-                } else {
-                    if(output[i].column !== board[0].length-1){
-                        valid = false
-                        break
-                    } else {
-                        if(horizontal){
-                            if(output[i-1].row - output[i].row === 0){
-                                words[wordIndex] += output[i].letter
-                            } else {
-                                horizontal = !horizontal
-                                wordIndex ++
-                                words[wordIndex] = output[i-1].letter + output[i].letter
-                            }
-                        } else {
-                            if(output[i-1].column - output[i].column === 0){
-                                words[wordIndex] += output[i].letter
-                            } else {
-                                horizontal = !horizontal
-                                wordIndex ++
-                                words[wordIndex] = output[i-1].letter + output[i].letter
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if(valid){
-            for(let i = 0; i<words.length; i++){
-                if(wordsData[words[i].toLowerCase()] !== 1){
-                    valid = false;
-                }
-            }
-        }
-        return [valid, words, totalPoints];
-    }
+          setSelectedTile((prev) => {return {...prev, style:newStyle}});
+        };
+
+        
+        // Add mousemove event listener when the component mounts
+        document.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('resize', handleResize);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+          document.removeEventListener('mousemove', handleMouseMove);
+          window.removeEventListener('resize', handleResize);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
+    const handleResize = () => {
+        setIsPhone(window.innerWidth < 700);
+    };
 
     //TODO: handle transition to next level
     function handleSubmit() {
@@ -148,37 +102,6 @@ export default function Game() {
             }
         }
     }
-    
-    //Getting the closest spaces to dropped tile and returning if it is within range
-    function getClosest(x, y) {
-        // return "failure_failure_failure"
-        const elements = document.querySelectorAll('[id*="play"], [id*="tile"]'); // Get elements with IDs containing "play"
-        let closestElement = null;
-        let minDistance = Infinity;
-      
-        elements.forEach((element) => {
-            if(element.id !== mousePosition.letter){
-                const rect = element.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-            
-                const distance = Math.sqrt((centerX - x) ** 2 + (centerY - y) ** 2);
-            
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestElement = element;
-                }
-            }
-        });
-        //Checking within range
-        if(closestElement.id.includes('tile') && minDistance > 45){
-            return "failure_failure_failure"
-        }
-        if(closestElement.id.includes('play') && minDistance > 30){
-            return "failure_failure_failure"
-        }
-        return closestElement.id;
-      }
 
     //TODO: optimize? this can be improved
     function findTileFromTray(id){
@@ -218,6 +141,7 @@ export default function Game() {
                 if(letter.value){
                     if(outcome[y][x].value === 0){
                         if(outcome[y][x].final){
+                            console.log('hi')
                             letter['final'] = true
                         }
                         outcome[y][x] = letter
@@ -230,37 +154,11 @@ export default function Game() {
         return tileCheck ? outcome:false;
     }
 
-    // Initial game setup --> calls board generation
-    useEffect(()=>{
-        const [newBoard, newStart, newLetters] = generateBoard(gameData.width,gameData.height, gameData.level)
-        setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters}})
     
-        //Setting up movement tracking for tile placing
-        const handleMouseMove = (e) => {
-            const newStyle = {
-                ...selectedTile.style,
-                display: 'flex',
-                position: 'absolute',
-                left: `${e.clientX-25}px`,
-                top: `${e.clientY-25}px`,
-            }
-          setSelectedTile((prev) => {return {...prev, style:newStyle}});
-        };
-
-        
-        // Add mousemove event listener when the component mounts
-        document.addEventListener('mousemove', handleMouseMove);
-    
-        // Clean up the event listener when the component unmounts
-        return () => {
-          document.removeEventListener('mousemove', handleMouseMove);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
 
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
-        const [first,second,type]=getClosest(mousePosition.x, mousePosition.y).split('_')
+        const [first,second,type]=getClosest(mousePosition.x, mousePosition.y, mousePosition.letter).split('_')
         if(type !== "failure"){
             if(type === 'play'){
                 //Check for overlapping tiles

@@ -16,10 +16,10 @@ export default function Board(props) {
             var point_val = props.data[i][j].point
 
             if(letter === 0){
-                board[i].push(<div className={props.data[i][j].final ? 'empty-square-final':'empty-square'} id={`${i}_${j}_play`}></div>)
+                board[i].push(<div className={props.data[i][j].final ? 'square empty-square-final':'square empty-square'} id={`${i}_${j}_play`}></div>)
             }
             else if ( letter === 1){
-                board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
+                board[i].push(<div className='square rock-square' id={`${i},${j}`}></div>)
             } else {
                 checkMatchedTile(i, j, props.data)
                 board[i].push(
@@ -116,7 +116,7 @@ export default function Board(props) {
             let row = []
             let hasValue = false
             for(let j=0; j<board[i].length; j++) {
-                let letter = board[i][j]
+                let letter = JSON.parse(JSON.stringify(board[i][j]))
                 if(letter.id === id){
                     hasValue = true
                     boardCopy[i][j] = {id:'',value:0,final:letter.final}
