@@ -154,7 +154,8 @@ function shuffle(array) {
 
 //TODO Add different letter shapes
 function addRandomLetters(letters,level){
-    let numOfLetters = 4-(level%3)
+    //let numOfLetters = 4-(level%3)
+    let numOfLetters = 1
     const alphabet = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNOOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWXYYZ"
     let letter
     for(let i =0; i<numOfLetters;i++){

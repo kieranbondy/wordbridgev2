@@ -1,0 +1,68 @@
+.tutorialContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-button {
+    width: 150px;
+    height: 40px;
+    background-color: lightgray;
+    border-radius: 7px;
+    border: 4px rgb(181, 181, 181) solid;
+    font-weight: bold;
+}
+
+.pageTitle{
+    display: flex;
+    justify-content: center;
+    font-size: 35px;
+    font-weight: bold;
+    padding-top: 30px;
+    margin-bottom: 30px;
+}
+
+.tutorials{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.tutorialOne{
+    display: flex;
+    flex-direction: column;
+    margin-top: 45px;
+}
+
+.tutorialOne p{
+    margin: 5%;
+    width: 250px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.tutorialOneGif {
+    object-fit: contain;
+    width: 250px;
+}
+
+.tutorialTwo {
+    display: flex;
+    flex-direction: column;
+}
+.tutorialTwo img{
+    width: 250px;
+}
+
+.tutorialTwo p{
+    margin: 5%;
+    width: 250px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.barrier{
+    width: 100px;
+}
