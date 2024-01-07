@@ -38,11 +38,11 @@ export default function Tile2(props) {
 
         function generateStyle(i,j,arr){
             let borderRadius = ['7px','7px','7px','7px']
-            let height = 54
-            let width = 54
+            let height = props.isPhone ? 44 : 54
+            let width = props.isPhone ? 44 : 54
             if(arr[i][j].value === ''){
-                return{width: '58px',
-                height: '54px',
+                return{width: `${width+4}px`,
+                height: `${height}px`,
             }
             }
             let borderWidth = ['4px','4px','4px','4px']
@@ -77,7 +77,6 @@ export default function Tile2(props) {
             //const backgroundColor = "lightblue";
             //const backgroundImage = 'url("src/assets/fulltile.png")'
             //const backgroundSize = 'cover'
-            
             return{width: `${width}px`,
                 height: `${height}px`,
                 borderRadius: borderRadius.join(' '),
@@ -90,7 +89,6 @@ export default function Tile2(props) {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontSize: '24px',
                 fontWeight: 'bold',
             }
         }
@@ -108,7 +106,7 @@ export default function Tile2(props) {
                         {row.map((letter, j) =>{
                         return(
                             <div key = {j} 
-                                style={generateStyle(i,j,props.letters)}>
+                                style={generateStyle(i,j,props.letters)} className='tile'>
                                 <div className='tile-divider' ></div>
                                 <div className='tile-value'>{letter.value}</div>
                                 <div className='tile-point'>{letter.point}</div>

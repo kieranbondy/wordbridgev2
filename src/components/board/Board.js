@@ -16,10 +16,10 @@ export default function Board(props) {
             var point_val = props.data[i][j].point
 
             if(letter === 0){
-                board[i].push(<div className={props.data[i][j].final ? 'empty-square-final':'empty-square'} id={`${i}_${j}_play`}></div>)
+                board[i].push(<div className={props.data[i][j].final ? 'square empty-square-final':'square empty-square'} id={`${i}_${j}_play`}></div>)
             }
             else if ( letter === 1){
-                board[i].push(<div className='rock-square' id={`${i},${j}`}></div>)
+                board[i].push(<div className='square rock-square' id={`${i},${j}`}></div>)
             } else {
                 checkMatchedTile(i, j, props.data)
                 board[i].push(
@@ -35,8 +35,8 @@ export default function Board(props) {
     function checkMatchedTile(row, col, data){
         let borderRadius = ['7px','7px','7px','7px']
         let borderWidth = ['4px','4px','4px','4px']
-        let height = 50
-        let width = 50
+        let height = props.isPhone ? 44 : 50
+        let width = props.isPhone ? 44 : 50
         let marginleft = '2px'
         let marginright = '2px'
         let margintop = '2px'
@@ -116,7 +116,7 @@ export default function Board(props) {
             let row = []
             let hasValue = false
             for(let j=0; j<board[i].length; j++) {
-                let letter = board[i][j]
+                let letter = JSON.parse(JSON.stringify(board[i][j]))
                 if(letter.id === id){
                     hasValue = true
                     boardCopy[i][j] = {id:'',value:0,final:letter.final}
@@ -177,13 +177,16 @@ export default function Board(props) {
               const onTouchEnd = (event) => {
                 const touch = event.changedTouches[0]
                 props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
-                event.target.removeEventListener("touchmove", onTouchMove);
-                event.target.removeEventListener("touchend", onTouchEnd);
                 // handle touchend here
             }
 
             event.target.addEventListener("touchmove", onTouchMove);
             event.target.addEventListener("touchend", onTouchEnd);
+
+            return () => {
+                event.target.removeEventListener("touchmove", onTouchMove);
+                event.target.removeEventListener("touchend", onTouchEnd);
+            }
         }
     }
     return (

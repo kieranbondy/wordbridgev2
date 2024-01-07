@@ -18,6 +18,7 @@
     text-align: center;
     width: 40%;
     pointer-events: none;
+    font-size: 24px;
 }
 
 .tile-point{
@@ -48,4 +49,21 @@
 
 .letterContainer{
     display: flex;
+}
+
+
+@media (max-width:700px) {
+    .tile-value{
+        text-align: center;
+        width: 40%;
+        pointer-events: none;
+        font-size: 19px;
+    }
+    .tile-point{
+        margin-top: 60%;
+        text-align: center;
+        font-size: 10px;
+        width: 30%;
+        pointer-events: none;
+    }
 }
