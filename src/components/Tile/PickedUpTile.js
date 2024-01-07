@@ -3,7 +3,7 @@ import './Tile.css'
 
 export default function PickedUpTile(props) {
         const handleEvent = (event) => {
-            if(event.type === "mouseup"){
+            if(event.type === "mouseup" && !props.isPhone){
                 props.setMousePosition({x:event.clientX, y:event.clientY, letter_id:event.target.parentElement.parentElement.id})
             }
         }

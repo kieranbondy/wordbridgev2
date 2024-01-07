@@ -163,6 +163,7 @@ export default function Board(props) {
                 return {...prev, board:newBoard}
             })
             const onTouchMove = (event) => {
+                if (event.cancelable) event.preventDefault();
                 // if (event.cancelable) event.preventDefault(); // Prevent default touch action
                 const touch = event.touches[0];
                 props.setSelectedTile((prev) => {return {...prev, style:{
@@ -176,7 +177,7 @@ export default function Board(props) {
               
               const onTouchEnd = (event) => {
                 const touch = event.changedTouches[0]
-                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
+                props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.id})
                 // handle touchend here
             }
 

@@ -60,6 +60,7 @@
     justify-content: center;
     align-items: center;
     cursor: grab;
+    touch-action: none;
 }
 .letter-square-final{
     background-color: #ffe27a;
@@ -72,6 +73,7 @@
     justify-content: center;
     align-items: center;
     cursor: grab;
+    touch-action: none
 }
 
 @media (max-width:700px) {

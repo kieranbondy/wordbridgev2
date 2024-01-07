@@ -22,13 +22,16 @@ export default function Tile2(props) {
                   const onTouchEnd = (event) => {
                     const touch = event.changedTouches[0]
                     props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
-                    event.target.removeEventListener("touchmove", onTouchMove);
-                    event.target.removeEventListener("touchend", onTouchEnd);
+                    
                     // handle touchend here
                 }
 
                 event.target.addEventListener("touchmove", onTouchMove);
                 event.target.addEventListener("touchend", onTouchEnd);
+                return()=>{
+                    event.target.removeEventListener("touchmove", onTouchMove);
+                    event.target.removeEventListener("touchend", onTouchEnd);
+                }
             }
             if(event.type === "mousedown"){
                 props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true, event.clientX, event.clientY) 
@@ -98,7 +101,7 @@ export default function Tile2(props) {
             <div 
             id={`${props.letters[0][0].id}_${props.index}_tile`} 
             onMouseDown={handleEvent} onTouchStart={handleEvent} 
-            style={{cursor: 'grab'}}>
+            style={{cursor: 'grab', touchAction: 'none'}}>
 
             {props.letters.map((row, i) => {
                 return(
