@@ -177,13 +177,16 @@ export default function Board(props) {
               const onTouchEnd = (event) => {
                 const touch = event.changedTouches[0]
                 props.setMousePosition({x:touch.clientX, y:touch.clientY, letter_id:event.target.parentElement.parentElement.id})
-                event.target.removeEventListener("touchmove", onTouchMove);
-                event.target.removeEventListener("touchend", onTouchEnd);
                 // handle touchend here
             }
 
             event.target.addEventListener("touchmove", onTouchMove);
             event.target.addEventListener("touchend", onTouchEnd);
+
+            return () => {
+                event.target.removeEventListener("touchmove", onTouchMove);
+                event.target.removeEventListener("touchend", onTouchEnd);
+            }
         }
     }
     return (

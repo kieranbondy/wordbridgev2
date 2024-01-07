@@ -14,7 +14,7 @@ export default function Game() {
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
     const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
     const [score, setScore] = useState(0)
-    const [isPhone, setIsPhone] = useState(false)
+    const [isPhone, setIsPhone] = useState(window.innerWidth < 700)
 
 
     // Initial game setup --> calls board generation
@@ -141,7 +141,6 @@ export default function Game() {
                 if(letter.value){
                     if(outcome[y][x].value === 0){
                         if(outcome[y][x].final){
-                            console.log('hi')
                             letter['final'] = true
                         }
                         outcome[y][x] = letter
@@ -158,55 +157,54 @@ export default function Game() {
 
     //Triggers when a letter is dropped and updates game states
     useEffect(()=>{
-        const [first,second,type]=getClosest(mousePosition.x, mousePosition.y, mousePosition.letter).split('_')
-        if(type !== "failure"){
-            if(type === 'play'){
-                //Check for overlapping tiles
-
-                //Placing letter on game board
-                console.log("placing letter")
-                setGameData((prevData) =>{
-                    let boardCopy = [...prevData.board];
-                    boardCopy = updateBoard(boardCopy,selectedTile.tile,first,second);
-                    if (boardCopy === false){
+        if(mousePosition.letter_id){
+            const [first,second,type]=getClosest(mousePosition.x, mousePosition.y, mousePosition.letter_id).split('_')
+            if(type !== "failure"){
+                if(type === 'play'){
+                    //Placing letter on game board
+                    console.log("placing letter")
+                    setGameData((prevData) =>{
+                        let boardCopy = [...prevData.board];
+                        boardCopy = updateBoard(boardCopy,selectedTile.tile,first,second);
+                        if (boardCopy === false){
+                            const updatedTray = [...prevData.tray]
+                            updatedTray.push(selectedTile.tile)
+                            return {...prevData, board: prevData.board, tray: updatedTray }
+                        } else{
+                            return { ...prevData, board: boardCopy};
+                        }
+                        
+                    })
+                } else if(type === 'tile'){
+                    //TODO Improve this maybe depending on what half ot the screen you are on it will place the tile on that end of the tray
+                    setGameData((prevData) => {
+                        const updatedTray = [...prevData.tray]; // Create a copy of the original tray array
+                        const index2 = parseInt(second);
+                        updatedTray.splice(index2, 0, selectedTile.tile)
+                        // Swap the elements at index1 and index2 in the updatedTray array                  
+                        // Return the updated data with the modified tray array
+                        return { ...prevData, tray: updatedTray };
+                    });
+                }
+                else {
+                    setGameData((prevData) => {
                         const updatedTray = [...prevData.tray]
                         updatedTray.push(selectedTile.tile)
-                        return {...prevData, board: prevData.board, tray: updatedTray }
-                    } else{
-                        return { ...prevData, board: boardCopy};
-                    }
-                    
-                })
-            } else if(type === 'tile'){
-                //TODO Improve this maybe depending on what half ot the screen you are on it will place the tile on that end of the tray
-                setGameData((prevData) => {
-                    const updatedTray = [...prevData.tray]; // Create a copy of the original tray array
-                    const index2 = parseInt(second);
-                    updatedTray.splice(index2, 0, selectedTile.tile)
-                    // Swap the elements at index1 and index2 in the updatedTray array                  
-                    // Return the updated data with the modified tray array
-                    return { ...prevData, tray: updatedTray };
-                  });
-            }
-            else {
+                        return {...prevData, tray: updatedTray }
+                    })
+                }
+                
+            } else if(selectedTile.id !== '') {
+                console.log("return to tray")
                 setGameData((prevData) => {
                     const updatedTray = [...prevData.tray]
                     updatedTray.push(selectedTile.tile)
                     return {...prevData, tray: updatedTray }
                 })
             }
-            
-        } else if(selectedTile.id !== '') {
-            console.log("return to tray")
-            setGameData((prevData) => {
-                const updatedTray = [...prevData.tray]
-                updatedTray.push(selectedTile.tile)
-                return {...prevData, tray: updatedTray }
-            })
+            setSelectedTile({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
         }
-        
-        setSelectedTile({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[mousePosition])
 
   return (
