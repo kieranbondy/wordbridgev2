@@ -213,7 +213,7 @@ export default function Game() {
     <> 
     <div id='picked-up' style={selectedTile.style}>
         {selectedTile.id !== '' &&
-            <PickedUpTile id={selectedTile.id} setMousePosition={setMousePosition} letters={selectedTile.tile}></PickedUpTile>
+            <PickedUpTile isPhone={isPhone} id={selectedTile.id} setMousePosition={setMousePosition} letters={selectedTile.tile}></PickedUpTile>
         }   
     </div>
     <div className='title'>
@@ -223,10 +223,10 @@ export default function Game() {
         {score}
     </div>
     <div className='board-container'>
-        <Board setMousePosition={setMousePosition} setSelectedTile={setSelectedTile} data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
+        <Board isPhone={isPhone} setMousePosition={setMousePosition} setSelectedTile={setSelectedTile} data={gameData.board} pickUpTile={pickUpTile} start={gameData.start} setGameData={setGameData}></Board>
     </div>
     <div className='board-container'>
-        <LetterTray setSelectedTile={setSelectedTile} isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown} pickUpTile={pickUpTile} setGameData={setGameData} setMousePosition={setMousePosition} letters={gameData.tray}></LetterTray>
+        <LetterTray isPhone={isPhone} setSelectedTile={setSelectedTile} isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown} pickUpTile={pickUpTile} setGameData={setGameData} setMousePosition={setMousePosition} letters={gameData.tray}></LetterTray>
     </div>
 
     <div className='board-container'>

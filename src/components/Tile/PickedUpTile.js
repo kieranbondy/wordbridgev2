@@ -15,11 +15,11 @@ export default function PickedUpTile(props) {
         //TODO: refactor this into a file for helper functions
         function generateStyle(i,j,arr){
             let borderRadius = ['7px','7px','7px','7px']
-            let height = 54
-            let width = 54
+            let height = props.isPhone ? 44 : 54
+            let width = props.isPhone ? 44 : 54
             if(arr[i][j].value === ''){
-                return{width: '58px',
-                height: '54px',
+                return{width: `${width+4}px`,
+                height: `${height}px`,
             }
             }
             let borderWidth = ['4px','4px','4px','4px']

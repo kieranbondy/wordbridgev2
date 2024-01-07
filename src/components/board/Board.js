@@ -35,8 +35,8 @@ export default function Board(props) {
     function checkMatchedTile(row, col, data){
         let borderRadius = ['7px','7px','7px','7px']
         let borderWidth = ['4px','4px','4px','4px']
-        let height = 50
-        let width = 50
+        let height = props.isPhone ? 44 : 50
+        let width = props.isPhone ? 44 : 50
         let marginleft = '2px'
         let marginright = '2px'
         let margintop = '2px'
