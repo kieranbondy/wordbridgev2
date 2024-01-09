@@ -23,11 +23,14 @@
     margin-bottom: 30px;
 }
 
-.tutorials{
+/*.tutorials{
     display:flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
+}*/
+
+.rowOne {
+    display: flex;
 }
 
 .tutorialOne{
@@ -66,3 +69,19 @@
 .barrier{
     width: 100px;
 }
+
+.tutorialThree {
+    display: flex;
+    flex-direction: column;
+}
+
+.tutorialThree img{
+    width: 250px;
+}
+.tutorialThree p{
+    margin: 5%;
+    width: 250px;
+    text-align: center;
+    font-size: 16px;
+}
+
