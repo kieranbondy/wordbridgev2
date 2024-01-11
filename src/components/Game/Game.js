@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import Board from '../board/Board'
+import Timer from '../Timer/Timer'
 import LetterTray from '../LetterTray/LetterTray'
 import { generateBoard } from '../../functions/boardGeneration'
 import './Game.css'
-import { Link } from 'react-router-dom'
 import PickedUpTile from '../Tile/PickedUpTile'
-import { checkValid, getClosest } from '../../functions/helpers'
+import { checkValid, getClosest, createTile } from '../../functions/helpers'
 
 export default function Game() {
     //States: Tracking mouse data and overall game data
@@ -14,6 +14,7 @@ export default function Game() {
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
     const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
     const [score, setScore] = useState(0)
+    const [time, setTime] = useState(90)
     const [isPhone, setIsPhone] = useState(window.innerWidth < 700)
 
 
@@ -51,6 +52,47 @@ export default function Game() {
         setIsPhone(window.innerWidth < 700);
     };
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+          if (time > 0) {
+            setTime(time - 1);
+          }
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, [time]);
+
+
+
+    function clear() {
+        let droppedLetters = {}
+        const board = JSON.parse(JSON.stringify(gameData.board))
+        for(let i = 0; i <board.length; i++){
+            for(let j = 0; j < board[0].length;j++){
+                let letter = board[i][j]
+                if(typeof letter.value === 'string'){
+                    board[i][j] = {id:'',value:0,final:letter.final}
+                    letter.final = false
+                    if(droppedLetters[letter.id]){
+                        droppedLetters[letter.id].push({letter:letter, row:i, col:j})
+                    } else {
+                        droppedLetters[letter.id] = [{letter:letter, row:i, col:j}]
+                    }
+                    // droppedLetters.push([[letter]])
+                }
+            }
+        }
+
+        const entries = Object.entries(droppedLetters);
+
+        setGameData((prev) => {
+            let newTray = JSON.parse(JSON.stringify(prev.tray))
+            for (const [, value] of entries) {
+                newTray.push(createTile(value))
+            }
+            return {...prev, board: board, tray: newTray}
+        })
+    }
     //TODO: handle transition to next level
     function handleSubmit() {
         let [valid, words, points] = checkValid(gameData.board)
@@ -80,7 +122,10 @@ export default function Game() {
                 }
             }
             const [newBoard, newStart, newLetters] = generateBoard(width,height, level)
+            setTime(prev => {return prev + Math.floor((90-prev)*.3)})
             setGameData((prevData) => { return {...prevData, board:newBoard, start: newStart, tray:newLetters, width:width, height:height, level:level}})
+        } else {
+            clear()
         }
         console.log(`This is a valid solution: ${valid} using the words ${words} worth ${points} points`)
     }
@@ -218,6 +263,9 @@ export default function Game() {
         WordBridge
     </div>
     <div className='title'>
+        <Timer time={time}></Timer>
+    </div>
+    <div className='title'>
         {score}
     </div>
     <div className='board-container'>
@@ -230,9 +278,7 @@ export default function Game() {
     <div className='board-container'>
         <div className='button-container'>
             <button className="submit-button" onClick={handleSubmit}>SUBMIT</button>
-            <Link to="/">
-                <button className='back-button'>BACK</button>
-            </Link>
+            <button className='back-button' onClick={clear}>Clear</button>
         </div>
     </div>
     </>
