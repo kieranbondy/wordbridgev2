@@ -28,6 +28,9 @@ export function generateBoard(width, height, level){
     
     
     const path = findRandomPath(grid, {row:0,column:0})
+    if(path === null){
+        return generateBoard(width, height, level)
+    }
     let last = path[path.length-1]
     grid[last.row][last.column] =  {id: "", value: 0, final:true }
     let letters = generateLettersFromPath(path, level,width,height)
