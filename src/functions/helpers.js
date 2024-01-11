@@ -113,3 +113,38 @@ export function getClosest(x, y, letter) {
     }
     return closestElement.id;
   }
+
+  export function createTile(inputArray) {
+    // Find the maximum row and column numbers in the inputArray
+    let maxRow = 0;
+    let maxCol = 0;
+    let startRow = inputArray[0].row
+    let startCol = inputArray[0].col
+    inputArray.forEach(item => {
+        item.row = item.row-startRow
+        item.col = item.col-startCol
+        maxRow = Math.max(maxRow, item.row);
+        maxCol = Math.max(maxCol, item.col);
+    });
+
+
+    // Create an empty matrix with rows and columns
+    const matrix = [];
+
+    for (let row = 0; row <= maxRow; row++) {
+        const newRow = [];
+
+        for (let col = 0; col <= maxCol; col++) {
+        const matchingItem = inputArray.find(item => item.row === row && item.col === col);
+        if (matchingItem) {
+            newRow.push(matchingItem.letter);
+        } else {
+            newRow.push({ id: "", value: "" });
+        }
+        }
+
+        matrix.push(newRow);
+    }
+
+    return matrix;
+  }

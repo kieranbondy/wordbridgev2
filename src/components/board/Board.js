@@ -111,7 +111,6 @@ export default function Board(props) {
         let output = []
         let boardCopy = JSON.parse(JSON.stringify(board));
         let occurences = []
-        console.log('callced')
         for(let i=0; i<board.length; i++) {
             let row = []
             let hasValue = false
