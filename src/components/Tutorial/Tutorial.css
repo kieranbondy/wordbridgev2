@@ -5,6 +5,15 @@
     justify-content: center;
 }
 
+.description{
+    margin-bottom: 25px;
+}
+
+.description p{
+    width: 500px;
+    text-align: center;
+}
+
 .back-button {
     width: 150px;
     height: 40px;
@@ -20,7 +29,6 @@
     font-size: 35px;
     font-weight: bold;
     padding-top: 30px;
-    margin-bottom: 30px;
 }
 
 /*.tutorials{
