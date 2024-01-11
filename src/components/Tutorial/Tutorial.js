@@ -5,6 +5,7 @@ import stepOne from '../../assets/tut1gif-ezgif.com-crop.gif'
 import stepTwo from '../../assets/staticTutONE.png'
 import stepThree1 from '../../assets/tut3right.png'
 import stepThree2 from '../../assets/tut3wrong.png'
+import scoreGif from '../../assets/score.gif'
 
 export default function Tutorial(){
     return (
@@ -17,6 +18,7 @@ export default function Tutorial(){
                 <p>Welcome to WordBridge! A fun word game where you build words out of letter tiles. Here is a short tutorial to get you started:</p>
             </div>
             <div className='tutorials'>
+                <div className='gameplayTitle'>Gameplay</div>
                 <div className='rowOne'>
                     <div className='tutorialTwo'>
                         <img className='tutorialTwoImage' src={stepTwo}/>
@@ -42,6 +44,12 @@ export default function Tutorial(){
                         <img className='tutorialThreeI' src={stepThree2}></img>
                         <p>Although both words above are valid, the solution would not be correct.</p>
                     </div>
+                </div>
+                <div className='scoringTitle'>Scoring</div>
+                <div className='scoringTutorial'>
+                    <p>WordBridge has a timer and a score at the top of the page. Crafting more difficult words leads to a higher score. If the timer runs out: Game Over!</p>
+                    <img className='scoringGif' src={scoreGif}/>
+                    <p>Have Fun!</p>
                 </div>
             </div>
             <div className='buttons'>

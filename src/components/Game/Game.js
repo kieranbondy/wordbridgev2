@@ -278,7 +278,7 @@ export default function Game() {
     <div className='board-container'>
         <div className='button-container'>
             <button className="submit-button" onClick={handleSubmit}>SUBMIT</button>
-            <button className='back-button' onClick={clear}>Clear</button>
+            <button className='back-button' onClick={clear}>CLEAR</button>
         </div>
     </div>
     </>
