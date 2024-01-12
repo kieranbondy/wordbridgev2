@@ -24,10 +24,18 @@
     background-color: rgb(123, 187, 255);
     border: 4px rgb(109, 165, 255) solid;
     border-radius: 7px;
+    color:black;
 }
 
 .tutButton {
     background-color: lightgray;
     border: 4px rgb(181, 181, 181) solid;
     border-radius: 7px;
+    color: black;
+}
+
+@media (max-width: 700px){
+    .homeContainer img {
+        width: 90vw;
+    }
 }

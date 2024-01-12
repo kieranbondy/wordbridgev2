@@ -52,9 +52,9 @@ export default function Tutorial(){
                     <p>Have Fun!</p>
                 </div>
             </div>
-            <div className='buttons'>
+            <div className='tutorial-buttons'>
                 <Link to="/">
-                <button className='back-button'>BACK</button>
+                <button className='back-tutorial'>BACK</button>
                 </Link>
             </div>
         </div>

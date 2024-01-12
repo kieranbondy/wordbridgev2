@@ -39,6 +39,7 @@
     border-radius: 7px;
     border: 4px rgb(181, 181, 181) solid;
     font-weight: bold;
+    color: black;
 }
 
 .playAgainButton {
@@ -49,4 +50,5 @@
     border-radius: 7px;
     border: 4px rgb(109, 165, 255) solid;
     font-weight: bold;
+    color: black;
 }

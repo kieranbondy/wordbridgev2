@@ -268,10 +268,10 @@ export default function Game() {
     <div className='title'>
         WordBridge
     </div>
-    <div className='title'>
+    <div className='time'>
         <Timer time={time}></Timer>
     </div>
-    <div className='title'>
+    <div className='score'>
         {score}
     </div>
     <div className='board-container'>
