@@ -15,7 +15,7 @@ export default function Game() {
     const [selectedTile, setSelectedTile] = useState({tile:[[]],id:'', position:{}, style:{position: 'absolute', display:'flex', cursor:'grabbing'}})
     const [gameData, setGameData] = useState({level:0, width:3, height:3, start:0, board:[],tray:[[[{id:1,value:'a'}]]]})
     const [score, setScore] = useState(0)
-    const [time, setTime] = useState(1000)
+    const [time, setTime] = useState(90)
     const [isPhone, setIsPhone] = useState(window.innerWidth < 700)
     const navigate = useNavigate()
 
