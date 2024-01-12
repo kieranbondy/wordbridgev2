@@ -33,7 +33,7 @@ export default function Tile2(props) {
                     event.target.removeEventListener("touchend", onTouchEnd);
                 }
             }
-            if(event.type === "mousedown"){
+            if(event.type === "mousedown" && !props.isPhone){
                 props.pickUpTile(event.target.parentElement.parentElement.id, props.letters, true, event.clientX, event.clientY) 
                 // handle touchstart here         
             }
