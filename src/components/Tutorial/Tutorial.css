@@ -5,35 +5,78 @@
     justify-content: center;
 }
 
-
-.description p{
-    width: 500px;
-    text-align: center;
-}
-
-.back-button {
-    width: 150px;
-    height: 40px;
-    background-color: lightgray;
-    border-radius: 7px;
-    border: 4px rgb(181, 181, 181) solid;
-    font-weight: bold;
-}
-
-.pageTitle{
+.pageTitle,
+.gameplayTitle{
     display: flex;
     justify-content: center;
+    text-align: center;
     font-size: 35px;
     font-weight: bold;
     padding-top: 30px;
 }
 
 .gameplayTitle{
-    display: flex;
-    justify-content: center;
-    font-size: 35px;
-    font-weight: bold;
+    padding-top:0px;
     margin-bottom: 30px;
+}
+
+.description p,
+.scoringTutorial p{
+    width: 500px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.rowOne {
+    display: flex;
+}
+
+.tutorialOne{
+    display: flex;
+    flex-direction: column;
+    margin-top: 45px;
+}
+
+.tutorialOne p,
+.tutorialTwo p{
+    margin: 5%;
+    width: 250px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.tutorialOneGif {
+    object-fit: contain;
+    width: 250px;
+}
+
+.tutorialTwo {
+    display: flex;
+    flex-direction: column;
+}
+.tutorialTwo img{
+    width: 250px;
+}
+
+
+
+.barrier{
+    width: 100px;
+}
+
+.tutorialThree {
+    display: flex;
+    flex-direction: column;
+}
+
+.tutorialThree img{
+    width: 250px;
+}
+.tutorialThree p{
+    margin: 5%;
+    width: 250px;
+    text-align: center;
+    font-size: 16px;
 }
 
 .scoringTitle{
@@ -55,70 +98,41 @@
     align-items: center;
 }
 
-.scoringTutorial p {
-    width: 500px;
-    text-align: center;
-    font-size: 16px;
-}
-/*.tutorials{
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}*/
 
-.rowOne {
-    display: flex;
+.back-button {
+    width: 150px;
+    height: 40px;
+    background-color: lightgray;
+    border-radius: 7px;
+    border: 4px rgb(181, 181, 181) solid;
+    font-weight: bold;
 }
 
-.tutorialOne{
-    display: flex;
-    flex-direction: column;
-    margin-top: 45px;
+@media (max-width: 700px){
+    .description p{
+        width:90vw;
+        text-align: center;
+    }
+    .tutorials {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+    }
+    .tutorials img {
+        width: 200px;
+    }
+    .tutorials p{
+        width: 200px;
+    }
+    .rowOne{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .barrier{
+        width: 0px;
+    }
+    .scoringTutorial p {
+        width: 90vw;
+    }
 }
-
-.tutorialOne p{
-    margin: 5%;
-    width: 250px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.tutorialOneGif {
-    object-fit: contain;
-    width: 250px;
-}
-
-.tutorialTwo {
-    display: flex;
-    flex-direction: column;
-}
-.tutorialTwo img{
-    width: 250px;
-}
-
-.tutorialTwo p{
-    margin: 5%;
-    width: 250px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.barrier{
-    width: 100px;
-}
-
-.tutorialThree {
-    display: flex;
-    flex-direction: column;
-}
-
-.tutorialThree img{
-    width: 250px;
-}
-.tutorialThree p{
-    margin: 5%;
-    width: 250px;
-    text-align: center;
-    font-size: 16px;
-}
-

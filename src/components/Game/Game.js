@@ -6,6 +6,7 @@ import { generateBoard } from '../../functions/boardGeneration'
 import './Game.css'
 import PickedUpTile from '../Tile/PickedUpTile'
 import { checkValid, getClosest, createTile } from '../../functions/helpers'
+import {useNavigate} from 'react-router-dom'
 
 export default function Game() {
     //States: Tracking mouse data and overall game data
@@ -16,7 +17,7 @@ export default function Game() {
     const [score, setScore] = useState(0)
     const [time, setTime] = useState(90)
     const [isPhone, setIsPhone] = useState(window.innerWidth < 700)
-
+    const navigate = useNavigate()
 
     // Initial game setup --> calls board generation
     useEffect(()=>{
@@ -57,10 +58,15 @@ export default function Game() {
           if (time > 0) {
             setTime(time - 1);
           }
+          else {
+            console.log("gameover");
+            clearInterval(interval)
+            navigate('/gameover', {state: {score}})
+          }
         }, 1000);
     
         return () => clearInterval(interval);
-      }, [time]);
+      }, [time, navigate, score]);
 
 
 

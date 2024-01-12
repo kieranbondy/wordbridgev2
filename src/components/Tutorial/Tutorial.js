@@ -17,8 +17,8 @@ export default function Tutorial(){
             <div className='description'>
                 <p>Welcome to WordBridge! A fun word game where you build words out of letter tiles. Here is a short tutorial to get you started:</p>
             </div>
+            <div className='gameplayTitle'>Gameplay</div>
             <div className='tutorials'>
-                <div className='gameplayTitle'>Gameplay</div>
                 <div className='rowOne'>
                     <div className='tutorialTwo'>
                         <img className='tutorialTwoImage' src={stepTwo}/>
