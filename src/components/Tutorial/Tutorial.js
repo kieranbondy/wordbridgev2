@@ -21,14 +21,14 @@ export default function Tutorial(){
             <div className='tutorials'>
                 <div className='rowOne'>
                     <div className='tutorialTwo'>
-                        <img className='tutorialTwoImage' src={stepTwo}/>
+                        <img className='tutorialTwoImage' src={stepTwo} alt='Left column start'/>
                         <p>The word must start in the left most column and end on the indicated square.</p>
                     </div>
                 
                     <div className='barrier'></div>
 
                     <div className='tutorialOne'>
-                        <img className='tutorialOneGif' src={stepOne}/>
+                        <img className='tutorialOneGif' src={stepOne} alt='Drag tiles onto the board'/>
                         <p>Drag tiles from the letter bank onto the board to form valid words.</p>
                     </div>
 
@@ -36,19 +36,19 @@ export default function Tutorial(){
 
                 <div className='rowOne'>
                     <div className='tutorialThree'>
-                        <img className='tutorialThreeR' src={stepThree1}></img>
+                        <img className='tutorialThreeR' src={stepThree1} alt='Create a path across'></img>
                         <p>Construct your words so that each letter forms a continuous path.</p>
                     </div>
                     <div className='barrier'></div>
                     <div className='tutorialThree'>
-                        <img className='tutorialThreeI' src={stepThree2}></img>
+                        <img className='tutorialThreeI' src={stepThree2} alt='Incorrect solution'></img>
                         <p>Although both words above are valid, the solution would not be correct.</p>
                     </div>
                 </div>
                 <div className='scoringTitle'>Scoring</div>
                 <div className='scoringTutorial'>
                     <p>WordBridge has a timer and a score at the top of the page. Crafting more difficult words leads to a higher score. If the timer runs out: Game Over!</p>
-                    <img className='scoringGif' src={scoreGif}/>
+                    <img className='scoringGif' src={scoreGif} alt='Scoring'/>
                     <p>Have Fun!</p>
                 </div>
             </div>

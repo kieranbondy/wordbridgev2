@@ -17,6 +17,7 @@ export default function HomePage(){
                 <Link to="/tutorial">
                     <button className='tutButton'>TUTORIAL</button>
                 </Link>
+                <a href='https://forms.gle/FZWfvBxLAJK5EYNx6'>Beta Testing Survey</a>
             </div>
         </div>
         </>

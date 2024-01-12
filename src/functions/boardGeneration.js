@@ -35,11 +35,6 @@ export function generateBoard(width, height, level){
     grid[last.row][last.column] =  {id: "", value: 0, final:true }
     let letters = generateLettersFromPath(path, level,width,height)
     letters = addRandomLetters(letters,level)
-    // const letters = generateLetterTiles(letterPath)
-    //Randomizes string and then turns string into array of characters
-    // for (let index = 0; index < random-1; index++) {
-    //     lettersList=lettersList+alphabet[Math.floor(Math.random() * alphabet.length)] 
-    // }
     return [grid,last, letters];
 }
 
@@ -157,8 +152,8 @@ function shuffle(array) {
 
 //TODO Add different letter shapes
 function addRandomLetters(letters,level){
-    //let numOfLetters = 4-(level%3)
-    let numOfLetters = 1
+    // let numOfLetters = 4-(level%3)
+    let numOfLetters = 4
     const alphabet = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNOOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWXYYZ"
     let letter
     for(let i =0; i<numOfLetters;i++){
