@@ -18,6 +18,7 @@ export default function HomePage(){
                     <button className='tutButton'>TUTORIAL</button>
                 </Link>
                 <a href='https://forms.gle/FZWfvBxLAJK5EYNx6'>Beta Testing Survey</a>
+                <p className='error-message'>We are experiencing some technical bugs on mobile devices. Sorry for the inconvenience.</p>
             </div>
         </div>
         </>
